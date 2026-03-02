@@ -14,19 +14,19 @@
 
 ##  Key Features
 
-* ** Autonomous Persona Generation**
+* Autonomous Persona Generation
     Dynamically creates victim profiles (e.g., "Grandpa Arthur") tailored to specific scam scripts (Refund, Crypto, Tech Support) using **Gemini 1.5 Pro**.
 
-* ** Bi-Directional Voice Intelligence**
+*  Bi-Directional Voice Intelligence
     Real-time, low-latency voice interaction using **ElevenLabs Turbo v2.5** and **Supabase Edge Functions**. Includes "Barge-In" capability—if the scammer interrupts, the AI listens immediately.
 
-* ** Live Psych-Profile Dashboard**
+*  Live Psych-Profile Dashboard
     A "War Room" interface that visualizes the scammer's stress levels and the AI's extraction progress in real-time.
 
-* ** Vector-Based Script Matching**
+*  Vector-Based Script Matching
     Uses **pgvector** to fingerprint scam scripts. If a scammer uses a known script, SIREN instantly links them to a broader criminal network.
 
-* ** Automated Forensic Reporting**
+*  Automated Forensic Reporting
     Generates a timestamped PDF containing the call transcript, audio recording, and the extracted bank account/crypto wallet for law enforcement.
 
 ---
