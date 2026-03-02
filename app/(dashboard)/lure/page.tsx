@@ -92,16 +92,16 @@ export default function LurePage() {
   };
 
   return (
-    <main ref={mainRef} className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-cyan-950/20 to-slate-950 relative overflow-x-hidden overflow-y-auto">
+    <main ref={mainRef} className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-x-hidden overflow-y-auto">
       {/* ANIMATED BACKGROUND */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
-          className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-96 h-96 bg-slate-700/5 rounded-full blur-3xl"
           animate={{ x: [0, 50, -30], y: [0, 30, -50] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-10 right-20 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl"
+          className="absolute bottom-10 right-20 w-80 h-80 bg-slate-700/5 rounded-full blur-3xl"
           animate={{ x: [0, -40, 30], y: [0, -30, 50] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -118,12 +118,10 @@ export default function LurePage() {
           transition={{ duration: 0.6 }}
         >
           <div className="mb-4">
-            <h1 className="text-5xl sm:text-6xl font-black tracking-tighter mb-3">
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                SIREN
-              </span>
+            <h1 className="text-5xl sm:text-6xl font-black tracking-tighter mb-3 text-slate-200">
+              SIREN
             </h1>
-            <p className="text-cyan-300/60 text-sm uppercase tracking-widest font-semibold">
+            <p className="text-slate-400/70 text-sm uppercase tracking-widest font-semibold">
               Forensic Voice AI Engagement System
             </p>
           </div>
@@ -131,7 +129,7 @@ export default function LurePage() {
 
         {/* MAIN CARD - CENTERED */}
         <motion.div
-          className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-3xl p-8 sm:p-10 md:p-14 shadow-2xl shadow-cyan-500/10"
+          className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-3xl p-8 sm:p-10 md:p-14 shadow-2xl shadow-slate-900/20"
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.1 }}
@@ -146,7 +144,7 @@ export default function LurePage() {
                 <h2 className="text-3xl sm:text-4xl font-black text-white">
                   OPERATION: LURE
                 </h2>
-                <p className="text-cyan-300/70 text-sm leading-relaxed max-w-lg mx-auto">
+                <p className="text-slate-300/70 text-sm leading-relaxed max-w-lg mx-auto">
                   Engage voice AI to analyze and document suspected scammer behavior. Full conversation forensically logged.
                 </p>
               </div>
@@ -154,8 +152,8 @@ export default function LurePage() {
               {/* START BUTTON */}
               <motion.button
                 onClick={handleStartRecording}
-                className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black uppercase tracking-widest py-6 sm:py-7 px-8 rounded-2xl text-base sm:text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-cyan-500/40 mx-auto max-w-sm"
-                whileHover={{ scale: 1.03, boxShadow: "0 0 30px rgba(34, 211, 238, 0.6)" }}
+                className="w-full bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 text-white font-black uppercase tracking-widest py-6 sm:py-7 px-8 rounded-2xl text-base sm:text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-slate-900/40 mx-auto max-w-sm"
+                whileHover={{ scale: 1.03, boxShadow: "0 0 30px rgba(71, 85, 105, 0.4)" }}
                 whileTap={{ scale: 0.97 }}
               >
                 <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 0.6, repeat: Infinity }}>
@@ -166,7 +164,7 @@ export default function LurePage() {
 
               {/* INFO BOX */}
               <motion.div
-                className="p-4 sm:p-5 bg-gradient-to-br from-cyan-900/30 to-blue-900/20 border border-cyan-500/20 rounded-xl text-center text-sm text-cyan-300/80 backdrop-blur-sm"
+                className="p-4 sm:p-5 bg-gradient-to-br from-slate-800/30 to-slate-700/20 border border-slate-600/20 rounded-xl text-center text-sm text-slate-300/80 backdrop-blur-sm"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
@@ -181,11 +179,11 @@ export default function LurePage() {
               
 
               {/* TITLE */}
-              <div className="text-center space-y-2 pb-6 border-b border-cyan-500/20">
-                <h2 className="text-2xl sm:text-3xl font-black text-cyan-300">
+              <div className="text-center space-y-2 pb-6 border-b border-slate-600/20">
+                <h2 className="text-2xl sm:text-3xl font-black text-slate-200">
                   SCAMMER PROFILE DETECTED
                 </h2>
-                <p className="text-cyan-300/60 text-sm">Details revealing in real-time...</p>
+                <p className="text-slate-400/60 text-sm">Details revealing in real-time...</p>
               </div>
 
               {/* DETAILS GRID - IMPROVED SPACING */}
@@ -201,26 +199,26 @@ export default function LurePage() {
                         key={idx}
                         className={`p-5 rounded-2xl border backdrop-blur-sm transition-all ${
                           detail.label === "Risk Level"
-                            ? "bg-gradient-to-br from-red-900/30 to-orange-900/20 border-red-500/40 shadow-lg shadow-red-500/10"
+                            ? "bg-gradient-to-br from-red-900/30 to-red-800/20 border-red-500/40 shadow-lg shadow-red-500/10"
                             : detail.label === "Fraud Type"
-                            ? "bg-gradient-to-br from-orange-900/30 to-red-900/20 border-orange-500/40 shadow-lg shadow-orange-500/10"
-                            : "bg-gradient-to-br from-cyan-900/30 to-blue-900/20 border-cyan-500/40 shadow-lg shadow-cyan-500/10"
+                            ? "bg-gradient-to-br from-red-900/25 to-slate-800/20 border-red-500/30 shadow-lg shadow-red-500/5"
+                            : "bg-gradient-to-br from-slate-800/30 to-slate-700/20 border-slate-600/30 shadow-lg shadow-slate-900/10"
                         }`}
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
                         whileHover={{ scale: 1.02, y: -2 }}
                       >
-                        <p className="text-xs uppercase tracking-widest font-bold text-cyan-400/70 mb-1.5">
+                        <p className="text-xs uppercase tracking-widest font-bold text-slate-400/70 mb-1.5">
                           {detail.label}
                         </p>
                         <p
                           className={`font-bold text-base ${
                             detail.label === "Risk Level"
-                              ? "text-red-400"
+                              ? "text-red-300"
                               : detail.label === "Fraud Type"
-                              ? "text-orange-400"
-                              : "text-cyan-300"
+                              ? "text-slate-300"
+                              : "text-slate-200"
                           }`}
                         >
                           {detail.value}
@@ -233,22 +231,22 @@ export default function LurePage() {
 
               {/* AUTO-REDIRECT COUNTDOWN - PROMINENT */}
               <motion.div
-                className="p-6 sm:p-7 bg-gradient-to-r from-orange-900/40 via-red-900/30 to-orange-900/40 border border-orange-500/40 rounded-2xl backdrop-blur-sm space-y-4"
+                className="p-6 sm:p-7 bg-gradient-to-r from-slate-800/40 via-slate-700/30 to-slate-800/40 border border-slate-600/30 rounded-2xl backdrop-blur-sm space-y-4"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 }}
               >
                 <div className="flex items-center justify-center gap-2 flex-wrap">
                   <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.6, repeat: Infinity }}>
-                    <AlertCircle className="w-5 h-5 text-orange-300" />
+                    <AlertCircle className="w-5 h-5 text-slate-400" />
                   </motion.div>
-                  <span className="text-orange-200 font-bold text-lg">
+                  <span className="text-slate-200 font-bold text-lg">
                     Automatic redirect in {countdownSeconds} second{countdownSeconds !== 1 ? 's' : ''}
                   </span>
                 </div>
-                <div className="w-full h-2.5 bg-orange-900/50 rounded-full overflow-hidden border border-orange-500/30">
+                <div className="w-full h-2.5 bg-slate-700/50 rounded-full overflow-hidden border border-slate-600/30">
                   <motion.div
-                    className="h-full bg-gradient-to-r from-orange-400 via-red-400 to-orange-400"
+                    className="h-full bg-gradient-to-r from-slate-400 via-slate-300 to-slate-400"
                     initial={{ width: "100%" }}
                     animate={{ width: `${(countdownSeconds / 10) * 100}%` }}
                     transition={{ duration: 0.9, ease: "linear" }}
@@ -259,8 +257,8 @@ export default function LurePage() {
               {/* MANUAL REDIRECT BUTTON */}
               <motion.button
                 onClick={handleManualRedirect}
-                className="w-full bg-gradient-to-r from-orange-600 via-red-600 to-orange-600 hover:from-orange-500 hover:to-red-500 text-white font-black uppercase tracking-widest py-6 sm:py-7 px-8 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl shadow-orange-500/40"
-                whileHover={{ scale: 1.03, boxShadow: "0 0 30px rgba(249, 115, 22, 0.6)" }}
+                className="w-full bg-gradient-to-r from-slate-700 via-slate-600 to-slate-700 hover:from-slate-600 hover:to-slate-500 text-white font-black uppercase tracking-widest py-6 sm:py-7 px-8 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl shadow-slate-900/40"
+                whileHover={{ scale: 1.03, boxShadow: "0 0 30px rgba(71, 85, 105, 0.4)" }}
                 whileTap={{ scale: 0.97 }}
               >
                 PROCEED TO STING
@@ -279,26 +277,26 @@ export default function LurePage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          <p className="text-cyan-400/50 text-xs uppercase tracking-widest font-semibold">
+          <p className="text-slate-400/50 text-xs uppercase tracking-widest font-semibold">
             Authorized Law Enforcement Use Only
           </p>
-          <p className="text-cyan-400/30 text-xs">
+          <p className="text-slate-400/30 text-xs">
             All conversations logged to conversation_log.txt
           </p>
         </motion.div>
 
         {/* PAGE NAVIGATION */}
         <motion.div
-          className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-4 sm:p-5 mb-6 w-full"
+          className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl p-4 sm:p-5 mb-6 w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
         >
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs text-cyan-300/60 font-mono">PAGE 1 / 3 - LURE</div>
+            <div className="text-xs text-slate-400/60 font-mono">PAGE 1 / 3 - LURE</div>
             <motion.button
               onClick={() => router.push(`/sting?phone=${encodeURIComponent(phoneNumber)}`)}
-              className="px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all text-sm flex items-center justify-center gap-2"
+              className="px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-slate-700 to-slate-600 border border-slate-600/50 text-white hover:shadow-lg hover:shadow-slate-900/30 transition-all text-sm flex items-center justify-center gap-2"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -312,14 +310,14 @@ export default function LurePage() {
       {/* SCROLL DOWN BUTTON */}
       <motion.button
         onClick={scrollDown}
-        className="fixed bottom-8 right-8 z-30 p-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-full shadow-lg shadow-cyan-500/40 transition-all"
+        className="fixed bottom-8 right-8 z-30 p-3 bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 text-white rounded-full shadow-lg shadow-slate-900/40 transition-all"
         initial={{ opacity: 0, scale: 0 }}
         animate={{
           opacity: showScrollButton ? 1 : 0,
           scale: showScrollButton ? 1 : 0,
         }}
         transition={{ duration: 0.3 }}
-        whileHover={{ scale: 1.1, boxShadow: "0 0 20px rgba(34, 211, 238, 0.8)" }}
+        whileHover={{ scale: 1.1, boxShadow: "0 0 20px rgba(71, 85, 105, 0.5)" }}
         whileTap={{ scale: 0.9 }}
         disabled={!showScrollButton}
       >

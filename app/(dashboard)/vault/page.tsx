@@ -98,16 +98,16 @@ export default function VaultPage() {
   };
 
   return (
-    <main className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-cyan-950/20 to-slate-950 relative overflow-x-hidden overflow-y-auto print:bg-white print:text-black">
+    <main className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-x-hidden overflow-y-auto print:bg-white print:text-black">
       {/* ANIMATED BACKGROUND */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 print:hidden">
         <motion.div
-          className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-96 h-96 bg-slate-700/5 rounded-full blur-3xl"
           animate={{ x: [0, 50, -30], y: [0, 30, -50] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-10 right-20 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl"
+          className="absolute bottom-10 right-20 w-80 h-80 bg-slate-700/5 rounded-full blur-3xl"
           animate={{ x: [0, -40, 30], y: [0, -30, 50] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -116,22 +116,22 @@ export default function VaultPage() {
       <div className="relative z-10 w-full">
         {/* STICKY HEADER */}
         <motion.header 
-          className="sticky top-0 backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border-b border-cyan-500/40 px-4 sm:px-6 py-6 sm:py-8 z-20 print:static print:bg-white print:border-black/20 print:py-4"
+          className="sticky top-0 backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border-b border-slate-600/30 px-4 sm:px-6 py-6 sm:py-8 z-20 print:static print:bg-white print:border-black/20 print:py-4"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               <div>
-                <h1 className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent tracking-tighter">
+                <h1 className="text-3xl sm:text-4xl font-black text-slate-200 tracking-tighter">
                   FORENSIC REPORT
                 </h1>
-                <p className="text-cyan-300/60 text-sm uppercase tracking-widest font-semibold mt-2 print:text-black/60 print:text-xs">Evidence Vault - Authorized Access Only</p>
+                <p className="text-slate-400/70 text-sm uppercase tracking-widest font-semibold mt-2 print:text-black/60 print:text-xs">Evidence Vault - Authorized Access Only</p>
               </div>
               <div className="text-right space-y-1 print:hidden">
-                <p className="text-cyan-300 font-mono font-bold text-sm">{caseId || "SIREN-LOADING"}</p>
+                <p className="text-slate-300 font-mono font-bold text-sm">{caseId || "SIREN-LOADING"}</p>
                 {typeof window !== 'undefined' && (
-                  <p className="text-cyan-300/60 text-xs">{new Date().toLocaleString()}</p>
+                  <p className="text-slate-400/60 text-xs">{new Date().toLocaleString()}</p>
                 )}
               </div>
             </div>
@@ -165,7 +165,7 @@ export default function VaultPage() {
           
           {/* THREAT ALERT - ALWAYS VISIBLE */}
           <motion.div
-            className="backdrop-blur-xl bg-gradient-to-br from-red-900/25 via-orange-900/20 to-red-900/20 border border-red-500/40 p-5 sm:p-6 rounded-2xl print:bg-red-50 print:border-red-300 print:p-4"
+            className="backdrop-blur-xl bg-gradient-to-br from-red-900/25 via-red-800/20 to-red-900/20 border border-red-500/40 p-5 sm:p-6 rounded-2xl print:bg-red-50 print:border-red-300 print:p-4"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -179,8 +179,8 @@ export default function VaultPage() {
               </motion.div>
               <div className="w-full">
                 <p className="font-bold text-base text-red-300 print:text-black mb-2">🚨 CRITICAL THREAT IDENTIFIED</p>
-                <p className="text-sm text-cyan-300/80 print:text-black leading-relaxed">
-                  Account <span className="font-mono bg-black/30 px-3 py-1 rounded border border-cyan-500/20 text-cyan-300">{reportData.accountNumber}</span> successfully extracted during forensic analysis. Law enforcement has been notified.
+                <p className="text-sm text-slate-300/80 print:text-black leading-relaxed">
+                  Account <span className="font-mono bg-black/30 px-3 py-1 rounded border border-slate-600/20 text-slate-300">{reportData.accountNumber}</span> successfully extracted during forensic analysis. Law enforcement has been notified.
                 </p>
               </div>
             </div>
@@ -190,21 +190,21 @@ export default function VaultPage() {
           <div className="space-y-4 print:space-y-3">
             {/* QUICK STATS */}
             <motion.div
-              className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
+              className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
               <button
                 onClick={() => setExpandedSection(expandedSection === "stats" ? null : "stats")}
-                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-cyan-900/20 transition-colors print:bg-white print:hover:bg-gray-50"
+                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-slate-700/20 transition-colors print:bg-white print:hover:bg-gray-50"
               >
-                <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent print:text-black">📊 INCIDENT SUMMARY</span>
-                <ChevronDown className={`w-5 h-5 text-cyan-400 transition-transform print:text-black ${expandedSection === "stats" ? "rotate-180" : ""} print:hidden`} />
+                <span className="text-base sm:text-lg font-bold text-slate-200 print:text-black">📊 INCIDENT SUMMARY</span>
+                <ChevronDown className={`w-5 h-5 text-slate-300 transition-transform print:text-black ${expandedSection === "stats" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
               {(expandedSection === "stats" || typeof window === "undefined") && (
-                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-cyan-500/20 print:border-black/10">
+                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-slate-600/30 print:border-black/10">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {[
                       { label: "Phone", value: reportData.phoneNumber },
@@ -213,10 +213,10 @@ export default function VaultPage() {
                       { label: "Status", value: "INTERCEPTED" },
                     ].map((item, i) => (
                       <div key={i} className="text-center print:text-left">
-                        <p className="text-xs text-cyan-300/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">
+                        <p className="text-xs text-slate-400/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">
                           {item.label}
                         </p>
-                        <p className="text-sm font-mono font-bold text-cyan-300 print:text-black break-all">
+                        <p className="text-sm font-mono font-bold text-slate-200 print:text-black break-all">
                           {item.value}
                         </p>
                       </div>
@@ -228,37 +228,37 @@ export default function VaultPage() {
 
             {/* LOCATION & DETAILS */}
             <motion.div
-              className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
+              className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
               <button
                 onClick={() => setExpandedSection(expandedSection === "location" ? null : "location")}
-                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-cyan-900/20 transition-colors print:bg-white print:hover:bg-gray-50"
+                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-slate-700/20 transition-colors print:bg-white print:hover:bg-gray-50"
               >
-                <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent print:text-black">🎯 TARGET INTELLIGENCE</span>
-                <ChevronDown className={`w-5 h-5 text-cyan-400 transition-transform print:text-black ${expandedSection === "location" ? "rotate-180" : ""} print:hidden`} />
+                <span className="text-base sm:text-lg font-bold text-slate-200 print:text-black">🎯 TARGET INTELLIGENCE</span>
+                <ChevronDown className={`w-5 h-5 text-slate-300 transition-transform print:text-black ${expandedSection === "location" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
               {(expandedSection === "location" || typeof window === "undefined") && (
-                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-cyan-500/20 print:border-black/10 space-y-4">
+                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-slate-600/30 print:border-black/10 space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <p className="text-xs text-cyan-300/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Extracted Account</p>
-                      <p className="font-mono text-sm font-bold text-cyan-300 print:text-black">{reportData.accountNumber}</p>
+                      <p className="text-xs text-slate-400/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Extracted Account</p>
+                      <p className="font-mono text-sm font-bold text-slate-200 print:text-black">{reportData.accountNumber}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-cyan-300/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Location</p>
-                      <p className="text-sm text-cyan-300 print:text-black">{reportData.city}, {reportData.country}</p>
+                      <p className="text-xs text-slate-400/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Location</p>
+                      <p className="text-sm text-slate-200 print:text-black">{reportData.city}, {reportData.country}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-cyan-300/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Coordinates</p>
-                      <p className="font-mono text-sm text-cyan-300 print:text-black">{reportData.latitude}°N, {reportData.longitude}°E</p>
+                      <p className="text-xs text-slate-400/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Coordinates</p>
+                      <p className="font-mono text-sm text-slate-200 print:text-black">{reportData.latitude}°N, {reportData.longitude}°E</p>
                     </div>
                     <div>
-                      <p className="text-xs text-cyan-300/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Extraction Time</p>
-                      <p className="font-mono text-sm text-cyan-300 print:text-black">{reportData.extractedAt}</p>
+                      <p className="text-xs text-slate-400/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Extraction Time</p>
+                      <p className="font-mono text-sm text-slate-200 print:text-black">{reportData.extractedAt}</p>
                     </div>
                   </div>
                 </div>
@@ -267,21 +267,21 @@ export default function VaultPage() {
 
             {/* TRANSCRIPT */}
             <motion.div
-              className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
+              className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
               <button
                 onClick={() => setExpandedSection(expandedSection === "transcript" ? null : "transcript")}
-                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-cyan-900/20 transition-colors print:bg-white print:hover:bg-gray-50"
+                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-slate-700/20 transition-colors print:bg-white print:hover:bg-gray-50"
               >
-                <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent print:text-black">🎙️ CALL TRANSCRIPT</span>
-                <ChevronDown className={`w-5 h-5 text-cyan-400 transition-transform print:text-black ${expandedSection === "transcript" ? "rotate-180" : ""} print:hidden`} />
+                <span className="text-base sm:text-lg font-bold text-slate-200 print:text-black">🎙️ CALL TRANSCRIPT</span>
+                <ChevronDown className={`w-5 h-5 text-slate-300 transition-transform print:text-black ${expandedSection === "transcript" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
               {(expandedSection === "transcript" || typeof window === "undefined") && (
-                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-cyan-500/20 print:border-black/10 max-h-96 overflow-y-auto space-y-3 print:max-h-none print:overflow-visible print:space-y-2">
+                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-slate-600/30 print:border-black/10 max-h-96 overflow-y-auto space-y-3 print:max-h-none print:overflow-visible print:space-y-2">
                   {reportData.transcript.map((line: Transcript, i: number) => (
                     <div
                       key={i}
@@ -304,30 +304,30 @@ export default function VaultPage() {
 
             {/* FORENSIC DETAILS */}
             <motion.div
-              className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
+              className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
               <button
                 onClick={() => setExpandedSection(expandedSection === "forensic" ? null : "forensic")}
-                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-cyan-900/20 transition-colors print:bg-white print:hover:bg-gray-50"
+                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-slate-700/20 transition-colors print:bg-white print:hover:bg-gray-50"
               >
-                <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent print:text-black">🔬 FORENSIC ANALYSIS</span>
-                <ChevronDown className={`w-5 h-5 text-cyan-400 transition-transform print:text-black ${expandedSection === "forensic" ? "rotate-180" : ""} print:hidden`} />
+                <span className="text-base sm:text-lg font-bold text-slate-200 print:text-black">🔬 FORENSIC ANALYSIS</span>
+                <ChevronDown className={`w-5 h-5 text-slate-300 transition-transform print:text-black ${expandedSection === "forensic" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
               {(expandedSection === "forensic" || typeof window === "undefined") && (
-                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-cyan-500/20 print:border-black/10 space-y-4">
+                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-slate-600/30 print:border-black/10 space-y-4">
                   {[
                     { title: "Pattern Match", result: "98% confidence to known scam", status: "DETECTED" },
                     { title: "Voice Analysis", result: "High stress indicators detected", status: "CONFIRMED" },
                     { title: "Account Extraction", result: "Successfully captured via social engineering", status: "SUCCESS" },
                     { title: "Case Linking", result: "Linked to 5 prior investigations", status: "LINKED" },
                   ].map((item, i) => (
-                    <div key={i} className="border-l-2 border-cyan-500/40 pl-4 print:border-black/20">
+                    <div key={i} className="border-l-2 border-slate-600/40 pl-4 print:border-black/20">
                       <div className="flex justify-between items-start gap-3 mb-2">
-                        <p className="text-sm text-cyan-300/80 print:text-black/80 font-medium">{item.title}</p>
+                        <p className="text-sm text-slate-300/80 print:text-black/80 font-medium">{item.title}</p>
                         <span className={`text-[10px] px-3 py-1 rounded-lg shrink-0 font-bold uppercase tracking-widest ${
                           item.status === "DETECTED" ? "bg-red-900/30 border border-red-500/40 text-red-400" :
                           item.status === "SUCCESS" ? "bg-green-900/30 border border-green-500/40 text-green-400" :
@@ -336,7 +336,7 @@ export default function VaultPage() {
                           {item.status}
                         </span>
                       </div>
-                      <p className="text-xs text-cyan-300/70 print:text-black/70 leading-relaxed">{item.result}</p>
+                      <p className="text-xs text-slate-300/70 print:text-black/70 leading-relaxed">{item.result}</p>
                     </div>
                   ))}
                 </div>
@@ -346,7 +346,7 @@ export default function VaultPage() {
 
           {/* ACTIONS FOOTER */}
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 print:hidden border-t border-cyan-500/20"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 print:hidden border-t border-slate-600/30"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
@@ -354,7 +354,7 @@ export default function VaultPage() {
             <motion.button
               onClick={handleDownloadPDF}
               disabled={isExporting}
-              className="flex items-center justify-center gap-2 px-4 py-3 font-bold uppercase tracking-widest rounded-xl transition-all bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 disabled:opacity-50 text-sm"
+              className="flex items-center justify-center gap-2 px-4 py-3 font-bold uppercase tracking-widest rounded-xl transition-all bg-gradient-to-r from-slate-700 to-slate-600 border border-slate-600/50 text-white hover:shadow-lg hover:shadow-slate-900/30 disabled:opacity-50 text-sm"
               whileHover={{ scale: !isExporting ? 1.02 : 1 }}
               whileTap={{ scale: !isExporting ? 0.98 : 1 }}
             >
@@ -363,7 +363,7 @@ export default function VaultPage() {
             </motion.button>
             <motion.button
               onClick={handlePrint}
-              className="flex items-center justify-center gap-2 px-4 py-3 font-bold uppercase tracking-widest rounded-xl transition-all bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 text-sm"
+              className="flex items-center justify-center gap-2 px-4 py-3 font-bold uppercase tracking-widest rounded-xl transition-all bg-gradient-to-r from-slate-700 to-slate-600 border border-slate-600/50 text-white hover:shadow-lg hover:shadow-slate-900/30 text-sm"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -372,7 +372,7 @@ export default function VaultPage() {
             </motion.button>
             <motion.button
               onClick={handleShare}
-              className="flex items-center justify-center gap-2 px-4 py-3 font-bold uppercase tracking-widest rounded-xl transition-all bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 text-sm"
+              className="flex items-center justify-center gap-2 px-4 py-3 font-bold uppercase tracking-widest rounded-xl transition-all bg-gradient-to-r from-slate-700 to-slate-600 border border-slate-600/50 text-white hover:shadow-lg hover:shadow-slate-900/30 text-sm"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -384,17 +384,17 @@ export default function VaultPage() {
 
         {/* PAGE NAVIGATION */}
         <motion.div
-          className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-4 sm:p-5 mb-6 w-full print:hidden"
+          className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl p-4 sm:p-5 mb-6 w-full print:hidden"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs text-cyan-300/60 font-mono">PAGE 3 / 3 - VAULT (FINAL REPORT)</div>
+            <div className="text-xs text-slate-400/60 font-mono">PAGE 3 / 3 - VAULT (FINAL REPORT)</div>
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
               <motion.button
                 onClick={() => router.push(`/sting?phone=${encodeURIComponent(phoneNumber)}`)}
-                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all text-sm"
+                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-slate-700 to-slate-600 border border-slate-600/50 text-white hover:shadow-lg hover:shadow-slate-900/30 transition-all text-sm"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -403,7 +403,7 @@ export default function VaultPage() {
               </motion.button>
               <motion.button
                 onClick={() => router.push("/lure")}
-                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all text-sm"
+                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-slate-700 to-slate-600 border border-slate-600/50 text-white hover:shadow-lg hover:shadow-slate-900/30 transition-all text-sm"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

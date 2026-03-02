@@ -30,6 +30,9 @@ export default function StingPage() {
   const [audioIntensity, setAudioIntensity] = useState(30);
   const [isCallingAlert, setIsCallingAlert] = useState(false);
   const [alertStatus, setAlertStatus] = useState("");
+  const [isSimulatingVoice, setIsSimulatingVoice] = useState(false);
+  const [aiResponse, setAiResponse] = useState<string>("");
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   // Simulate call progression
   useEffect(() => {
@@ -95,6 +98,62 @@ export default function StingPage() {
       setAlertStatus("Alert call queued - offline mode");
     } finally {
       setIsCallingAlert(false);
+    }
+  };
+
+  // Simulate AI voice response
+  const simulateAiVoice = async () => {
+    try {
+      setIsSimulatingVoice(true);
+      
+      // Get the last scammer message
+      const lastScammerMessage = [...messages]
+        .reverse()
+        .find(m => m.sender === "TARGET")?.text;
+
+      if (!lastScammerMessage) {
+        setAiResponse("No scammer message to respond to");
+        return;
+      }
+
+      console.log("🎤 Generating AI voice response...");
+
+      const response = await fetch("/api/ai-response", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lastMessage: lastScammerMessage,
+          context: {
+            targetPhone: phoneNumber,
+            riskScore,
+            stressLevel,
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setAiResponse(data.aiResponse);
+        
+        // Play the audio if available
+        if (data.audioUrl && audioRef.current) {
+          audioRef.current.src = data.audioUrl;
+          audioRef.current.play().catch(err => console.error("Playback error:", err));
+        }
+
+        console.log("✅ AI response generated:", data.aiResponse);
+        if (data.callSid) {
+          console.log("✅ Twilio call initiated:", data.callSid);
+        }
+      } else {
+        setAiResponse("Failed to generate AI response");
+      }
+    } catch (error) {
+      console.error("Failed to simulate AI voice:", error);
+      setAiResponse("Error generating response");
+    } finally {
+      setIsSimulatingVoice(false);
     }
   };
 
@@ -200,16 +259,16 @@ export default function StingPage() {
   };
 
   return (
-    <main className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-cyan-950/20 to-slate-950 relative overflow-x-hidden overflow-y-auto">
+    <main className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-x-hidden overflow-y-auto">
       {/* ANIMATED BACKGROUND */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
-          className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-96 h-96 bg-slate-700/5 rounded-full blur-3xl"
           animate={{ x: [0, 50, -30], y: [0, 30, -50] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-10 right-20 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl"
+          className="absolute bottom-10 right-20 w-80 h-80 bg-slate-700/5 rounded-full blur-3xl"
           animate={{ x: [0, -40, 30], y: [0, -30, 50] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -268,7 +327,7 @@ export default function StingPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <div className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-6 h-full">
+            <div className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl p-6 h-full">
               <TargetIntel
                 phoneNumber={phoneNumber}
                 riskScore={Math.round(riskScore)}
@@ -290,12 +349,59 @@ export default function StingPage() {
             transition={{ delay: 0.2 }}
           >
             {/* AUDIO WAVEFORM */}
-            <div className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-6">
+            <div className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl p-6">
               <AudioWaveform isActive={isCallActive} intensity={audioIntensity} />
             </div>
 
+            {/* AI VOICE SIMULATION BUTTON */}
+            <motion.div
+              className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl p-6"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="flex flex-col items-center gap-4">
+                <p className="text-xs uppercase tracking-widest text-slate-300/60 font-semibold">AI Voice Response</p>
+                <motion.button
+                  onClick={simulateAiVoice}
+                  disabled={isSimulatingVoice || !isCallActive}
+                  className="px-8 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-slate-700 to-slate-600 border border-slate-600/50 text-white hover:shadow-lg hover:shadow-slate-900/30 transition-all text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  whileHover={{ scale: !isSimulatingVoice ? 1.05 : 1 }}
+                  whileTap={{ scale: !isSimulatingVoice ? 0.95 : 1 }}
+                >
+                  {isSimulatingVoice ? (
+                    <span className="flex items-center gap-2">
+                      <motion.div
+                        className="w-2 h-2 bg-white rounded-full"
+                        animate={{ scale: [1, 1.5, 1] }}
+                        transition={{ duration: 0.6, repeat: Infinity }}
+                      />
+                      GENERATING...
+                    </span>
+                  ) : (
+                    "🎤 SIMULATE AI VOICE"
+                  )}
+                </motion.button>
+
+                {/* AI Response Display */}
+                {aiResponse && (
+                  <motion.div
+                    className="w-full mt-2 p-3 backdrop-blur-sm bg-slate-700/20 border border-slate-600/30 rounded-lg"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <p className="text-xs text-slate-300/60 uppercase tracking-widest font-semibold mb-1">AI RESPONSE:</p>
+                    <p className="text-sm text-slate-200 leading-relaxed">{aiResponse}</p>
+                  </motion.div>
+                )}
+
+                {/* Hidden Audio Player */}
+                <audio ref={audioRef} className="hidden" />
+              </div>
+            </motion.div>
+
             {/* STRESS GAUGE */}
-            <div className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-6">
+            <div className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl p-6">
               <StressGauge level={Math.round(stressLevel)} />
             </div>
           </motion.div>
@@ -307,7 +413,7 @@ export default function StingPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <div className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-6 h-full">
+            <div className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl p-6 h-full">
               <LiveTranscript messages={messages} />
             </div>
           </motion.div>
@@ -315,7 +421,7 @@ export default function StingPage() {
 
         {/* CONTROL BAR */}
         <motion.div
-          className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-6"
+          className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl p-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
@@ -323,13 +429,13 @@ export default function StingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
             {/* STATUS INFO */}
             <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2 text-cyan-300">
+              <div className="flex items-center gap-2 text-slate-300">
                 <Zap className="w-4 h-4" />
                 <span className="font-semibold">System Load: {Math.round(audioIntensity)}%</span>
               </div>
-              <div className="w-full h-2 bg-cyan-900/30 rounded-full overflow-hidden border border-cyan-500/30">
+              <div className="w-full h-2 bg-slate-700/30 rounded-full overflow-hidden border border-slate-600/30">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-cyan-400 to-blue-400"
+                  className="h-full bg-gradient-to-r from-slate-400 to-slate-300"
                   animate={{ width: `${audioIntensity}%` }}
                   transition={{ duration: 0.5 }}
                 />
@@ -340,12 +446,12 @@ export default function StingPage() {
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-orange-400" />
-                <span className="font-semibold text-orange-300">Threat Level</span>
+                <span className="font-semibold text-slate-300">Threat Level</span>
               </div>
               <div className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest text-center ${
                 riskScore > 70 
                   ? "bg-red-900/30 border border-red-500/40 text-red-400" 
-                  : "bg-orange-900/30 border border-orange-500/40 text-orange-400"
+                  : "bg-slate-700/30 border border-slate-600/40 text-slate-300"
               }`}>
                 {riskScore > 70 ? "CRITICAL" : "ELEVATED"}
               </div>
@@ -353,8 +459,8 @@ export default function StingPage() {
 
             {/* SESSION INFO */}
             <div className="text-sm">
-              <p className="text-cyan-300/60 text-xs uppercase tracking-widest mb-1">Session Exchanges</p>
-              <p className="text-2xl font-bold text-cyan-300">{Math.round(messages.length / 2)}</p>
+              <p className="text-slate-300/60 text-xs uppercase tracking-widest mb-1">Session Exchanges</p>
+              <p className="text-2xl font-bold text-slate-200">{Math.round(messages.length / 2)}</p>
             </div>
 
             {/* ACTION BUTTON */}
@@ -372,8 +478,8 @@ export default function StingPage() {
               disabled={isCallingAlert}
               className={`py-3 px-6 font-bold uppercase tracking-widest rounded-xl transition-all text-sm ${
                 isCallActive
-                  ? "bg-gradient-to-r from-red-600 to-orange-600 border border-red-400/50 text-white hover:shadow-lg hover:shadow-red-500/30 disabled:opacity-50"
-                  : "bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 disabled:opacity-50"
+                  ? "bg-gradient-to-r from-red-600 to-red-500 border border-red-400/50 text-white hover:shadow-lg hover:shadow-red-500/30 disabled:opacity-50"
+                  : "bg-gradient-to-r from-slate-700 to-slate-600 border border-slate-600/50 text-white hover:shadow-lg hover:shadow-slate-900/30 disabled:opacity-50"
               }`}
               whileHover={{ scale: !isCallingAlert ? 1.02 : 1 }}
               whileTap={{ scale: !isCallingAlert ? 0.98 : 1 }}
@@ -385,7 +491,7 @@ export default function StingPage() {
           {/* ALERT STATUS MESSAGE */}
           {alertStatus && (
             <motion.div
-              className="mt-4 p-3 backdrop-blur-sm bg-cyan-900/20 border border-cyan-500/30 rounded-lg text-cyan-300 text-xs text-center"
+              className="mt-4 p-3 backdrop-blur-sm bg-slate-700/20 border border-slate-600/30 rounded-lg text-slate-300 text-xs text-center"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
             >
@@ -396,17 +502,17 @@ export default function StingPage() {
 
         {/* PAGE NAVIGATION */}
         <motion.div
-          className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-4 sm:p-5 mb-6 w-full"
+          className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-2xl p-4 sm:p-5 mb-6 w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs text-cyan-300/60 font-mono">PAGE 2 / 3 - STING</div>
+            <div className="text-xs text-slate-400/60 font-mono">PAGE 2 / 3 - STING</div>
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
               <motion.button
                 onClick={() => router.push("/lure")}
-                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all text-sm"
+                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-slate-700 to-slate-600 border border-slate-600/50 text-white hover:shadow-lg hover:shadow-slate-900/30 transition-all text-sm"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -415,7 +521,7 @@ export default function StingPage() {
               </motion.button>
               <motion.button
                 onClick={() => router.push(`/vault?phone=${encodeURIComponent(phoneNumber)}`)}
-                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all text-sm"
+                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-slate-700 to-slate-600 border border-slate-600/50 text-white hover:shadow-lg hover:shadow-slate-900/30 transition-all text-sm"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
