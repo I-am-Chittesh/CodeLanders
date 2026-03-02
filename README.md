@@ -1,2 +1,4 @@
-# CodeLanders
-This is the official repository of the team Code Landers for Geminathon 2026.
+# Project SIREN
+### Semantic Interaction and Response for Extracting Nodes
+--------------------------------------------------------
+rough
