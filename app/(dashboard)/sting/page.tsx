@@ -7,7 +7,7 @@ import AudioWaveform from "@/components/siren/AudioWaveform";
 import TargetIntel from "@/components/siren/ScammerMap";
 import LiveTranscript from "@/components/siren/LiveTranscript";
 import StressGauge from "@/components/siren/StressGauge";
-import { Volume2, Zap, AlertTriangle } from "lucide-react";
+import { Zap, AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Message {
   id: string;
@@ -200,144 +200,232 @@ export default function StingPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-siren-green p-4 font-mono relative overflow-hidden">
-      {/* SCANLINE EFFECT */}
-      <div className="absolute inset-0 pointer-events-none z-50 mix-blend-overlay opacity-5">
-        <div className="scanlines" />
+    <main className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-cyan-950/20 to-slate-950 relative overflow-x-hidden overflow-y-auto">
+      {/* ANIMATED BACKGROUND */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <motion.div
+          className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          animate={{ x: [0, 50, -30], y: [0, 30, -50] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-10 right-20 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl"
+          animate={{ x: [0, -40, 30], y: [0, -30, 50] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        />
       </div>
 
-      {/* HEADER */}
-      <header className="relative z-10 mb-6 border-b-2 border-siren-green/30 pb-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold tracking-widest text-siren-green">
-              ▲ SIREN ▲
-            </h1>
-            <span className="text-xs text-siren-green/60 uppercase">OPERATION STING</span>
-          </div>
-          <div className="flex items-center gap-4">
-            {isCallActive && (
-              <motion.div
-                className="flex items-center gap-2 text-red-500"
-                animate={{ opacity: [1, 0.5, 1] }}
-                transition={{ duration: 1, repeat: Infinity }}
-              >
-                <Volume2 className="w-4 h-4" />
-                <span className="text-xs font-mono tracking-widest">CALL_ACTIVE</span>
-              </motion.div>
-            )}
-            <div className="text-xs text-siren-green/60 font-mono">
-              {new Date().toLocaleTimeString()}
+      {/* CONTENT WRAPPER */}
+      <div className="relative z-10 w-full max-w-7xl px-4 sm:px-6 py-6 sm:py-8 mx-auto">
+        
+        {/* HEADER */}
+        <motion.div
+          className="mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <h1 className="text-4xl sm:text-5xl font-black tracking-tighter mb-1">
+                <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  OPERATION: STING
+                </span>
+              </h1>
+              <p className="text-cyan-300/60 text-sm uppercase tracking-widest font-semibold">
+                Live Call Analysis & Enforcement Dispatch
+              </p>
+            </div>
+            <div className="flex items-center gap-4 flex-wrap">
+              {isCallActive && (
+                <motion.div
+                  className="px-4 py-2 backdrop-blur-sm bg-gradient-to-r from-red-900/30 to-transparent border border-red-500/40 rounded-lg flex items-center gap-2"
+                  animate={{ opacity: [1, 0.5, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                >
+                  <motion.div
+                    className="w-2 h-2 bg-red-500 rounded-full"
+                    animate={{ scale: [1, 1.5, 1] }}
+                    transition={{ duration: 0.6, repeat: Infinity }}
+                  />
+                  <span className="text-xs font-semibold text-red-400 uppercase tracking-widest">CALL ACTIVE</span>
+                </motion.div>
+              )}
+              <div className="text-xs text-cyan-300/60 font-mono px-3 py-2 backdrop-blur-sm bg-cyan-900/10 border border-cyan-500/20 rounded-lg">
+                {new Date().toLocaleTimeString()}
+              </div>
             </div>
           </div>
+        </motion.div>
+
+        {/* MAIN GRID */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+          
+          {/* LEFT PANEL: TARGET INTEL */}
+          <motion.div
+            className="lg:col-span-3"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <div className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-6 h-full">
+              <TargetIntel
+                phoneNumber={phoneNumber}
+                riskScore={Math.round(riskScore)}
+                location={{
+                  city: "Mumbai",
+                  country: "India",
+                  lat: 19.076 + (Math.random() - 0.5) * 0.2,
+                  lng: 72.8776 + (Math.random() - 0.5) * 0.2,
+                }}
+              />
+            </div>
+          </motion.div>
+
+          {/* CENTER PANEL: AUDIO WAVEFORM & STRESS */}
+          <motion.div
+            className="lg:col-span-6 space-y-6"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            {/* AUDIO WAVEFORM */}
+            <div className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-6">
+              <AudioWaveform isActive={isCallActive} intensity={audioIntensity} />
+            </div>
+
+            {/* STRESS GAUGE */}
+            <div className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-6">
+              <StressGauge level={Math.round(stressLevel)} />
+            </div>
+          </motion.div>
+
+          {/* RIGHT PANEL: LIVE TRANSCRIPT */}
+          <motion.div
+            className="lg:col-span-3"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <div className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-6 h-full">
+              <LiveTranscript messages={messages} />
+            </div>
+          </motion.div>
         </div>
-      </header>
 
-      {/* MAIN GRID: 3 PANELS */}
-      <div className="relative z-10 grid grid-cols-12 gap-4 h-[calc(100vh-150px)]">
-        
-        {/* LEFT PANEL: TARGET INTEL */}
+        {/* CONTROL BAR */}
         <motion.div
-          className="col-span-3 space-y-4"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <TargetIntel
-            phoneNumber={phoneNumber}
-            riskScore={Math.round(riskScore)}
-            location={{
-              city: "Mumbai",
-              country: "India",
-              lat: 19.076 + (Math.random() - 0.5) * 0.2,
-              lng: 72.8776 + (Math.random() - 0.5) * 0.2,
-            }}
-          />
-        </motion.div>
-
-        {/* CENTER PANEL: AUDIO WAVEFORM */}
-        <motion.div
-          className="col-span-6 flex flex-col gap-4"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="flex-1">
-            <AudioWaveform isActive={isCallActive} intensity={audioIntensity} />
-          </div>
-
-          {/* STRESS GAUGE BELOW WAVEFORM */}
-          <div className="h-24">
-            <StressGauge level={Math.round(stressLevel)} />
-          </div>
-        </motion.div>
-
-        {/* RIGHT PANEL: LIVE TRANSCRIPT */}
-        <motion.div
-          className="col-span-3"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
+          className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <LiveTranscript messages={messages} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-center">
+            {/* STATUS INFO */}
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2 text-cyan-300">
+                <Zap className="w-4 h-4" />
+                <span className="font-semibold">System Load: {Math.round(audioIntensity)}%</span>
+              </div>
+              <div className="w-full h-2 bg-cyan-900/30 rounded-full overflow-hidden border border-cyan-500/30">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-cyan-400 to-blue-400"
+                  animate={{ width: `${audioIntensity}%` }}
+                  transition={{ duration: 0.5 }}
+                />
+              </div>
+            </div>
+
+            {/* THREAT LEVEL */}
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-orange-400" />
+                <span className="font-semibold text-orange-300">Threat Level</span>
+              </div>
+              <div className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-widest text-center ${
+                riskScore > 70 
+                  ? "bg-red-900/30 border border-red-500/40 text-red-400" 
+                  : "bg-orange-900/30 border border-orange-500/40 text-orange-400"
+              }`}>
+                {riskScore > 70 ? "CRITICAL" : "ELEVATED"}
+              </div>
+            </div>
+
+            {/* SESSION INFO */}
+            <div className="text-sm">
+              <p className="text-cyan-300/60 text-xs uppercase tracking-widest mb-1">Session Exchanges</p>
+              <p className="text-2xl font-bold text-cyan-300">{Math.round(messages.length / 2)}</p>
+            </div>
+
+            {/* ACTION BUTTON */}
+            <motion.button
+              onClick={() => {
+                setIsCallActive(!isCallActive);
+                if (isCallActive) {
+                  callEndedRef.current = true;
+                  triggerAlertCall();
+                  setTimeout(() => {
+                    router.push(`/vault?phone=${encodeURIComponent(phoneNumber)}`);
+                  }, 3000);
+                }
+              }}
+              disabled={isCallingAlert}
+              className={`py-3 px-6 font-bold uppercase tracking-widest rounded-xl transition-all text-sm ${
+                isCallActive
+                  ? "bg-gradient-to-r from-red-600 to-orange-600 border border-red-400/50 text-white hover:shadow-lg hover:shadow-red-500/30 disabled:opacity-50"
+                  : "bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 disabled:opacity-50"
+              }`}
+              whileHover={{ scale: !isCallingAlert ? 1.02 : 1 }}
+              whileTap={{ scale: !isCallingAlert ? 0.98 : 1 }}
+            >
+              {isCallingAlert ? "CALLING ALERT..." : isCallActive ? "END CALL" : "NEW CALL"}
+            </motion.button>
+          </div>
+
+          {/* ALERT STATUS MESSAGE */}
+          {alertStatus && (
+            <motion.div
+              className="mt-4 p-3 backdrop-blur-sm bg-cyan-900/20 border border-cyan-500/30 rounded-lg text-cyan-300 text-xs text-center"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              ✓ {alertStatus}
+            </motion.div>
+          )}
+        </motion.div>
+
+        {/* PAGE NAVIGATION */}
+        <motion.div
+          className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-4 sm:p-5 mb-6 w-full"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-xs text-cyan-300/60 font-mono">PAGE 2 / 3 - STING</div>
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <motion.button
+                onClick={() => router.push("/lure")}
+                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all text-sm"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                PREVIOUS
+              </motion.button>
+              <motion.button
+                onClick={() => router.push(`/vault?phone=${encodeURIComponent(phoneNumber)}`)}
+                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all text-sm"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                NEXT PAGE
+                <ChevronRight className="w-4 h-4" />
+              </motion.button>
+            </div>
+          </div>
         </motion.div>
       </div>
-
-      {/* BOTTOM CONTROL BAR */}
-      <motion.div
-        className="relative z-10 mt-4 border-t-2 border-siren-green/30 pt-4 flex items-center justify-between"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        <div className="flex items-center gap-4 text-xs font-mono">
-          <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-yellow-500" />
-            <span>SYSTEM_LOAD: {Math.round(audioIntensity)}%</span>
-          </div>
-          <div className="w-px h-4 bg-siren-green/20" />
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-siren-red" />
-            <span>THREAT_LEVEL: {riskScore > 70 ? "CRITICAL" : "ELEVATED"}</span>
-          </div>
-        </div>
-
-        <button
-          onClick={() => {
-            setIsCallActive(!isCallActive);
-            if (isCallActive) {
-              // If manually ending the call
-              callEndedRef.current = true;
-              triggerAlertCall();
-              setTimeout(() => {
-                router.push(`/vault?phone=${encodeURIComponent(phoneNumber)}`);
-              }, 3000);
-            }
-          }}
-          disabled={isCallingAlert}
-          className={`px-6 py-2 border-2 font-mono text-xs tracking-widest transition-all ${
-            isCallActive
-              ? "border-siren-red text-siren-red hover:bg-siren-red/20 disabled:opacity-50"
-              : "border-siren-green text-siren-green hover:bg-siren-green/20 disabled:opacity-50"
-          }`}
-        >
-          {isCallingAlert ? "CALLING_ALERT..." : isCallActive ? "END_CALL" : "NEW_CALL"}
-        </button>
-
-        {alertStatus && (
-          <motion.div
-            className="text-xs text-siren-green/70 px-4 py-2 border border-siren-green/30 rounded bg-black/50 max-w-xs text-center"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            {alertStatus}
-          </motion.div>
-        )}
-
-        <div className="text-xs text-siren-green/60">
-          Session: {Math.round(messages.length / 2)} exchanges
-        </div>
-      </motion.div>
     </main>
   );
 }

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * SIREN ALERT FOLLOWUP - Handle User Input
+ * SIREN ALERT FOLLOWUP - Handle User Input with ElevenLabs Voice
  * POST /api/alert-followup
- * 
+ *
  * Processes DTMF (dial tone) input from the call recipient.
  * - Press 1: Display forensic report
  * - Press 2: Transfer to law enforcement
@@ -20,59 +20,50 @@ export async function POST(request: NextRequest) {
 
     console.log(`🔘 User pressed: ${digits} (Call SID: ${callSid})`);
 
+    const publicUrl = process.env.PUBLIC_APP_URL || `${request.nextUrl.origin}`;
+
     let twiml = `<?xml version="1.0" encoding="UTF-8"?>
-<Response>`;
+<Response>
+`;
 
-    switch (digits) {
-      case "1":
-        // Press 1: Display forensic report
-        twiml += `
-  <Say voice="alice">
-    Opening forensic report on your dashboard. The case details, transcript, and threat assessment are now live.
-  </Say>
-  <Hangup/>`;
-        break;
-
-      case "2":
-        // Press 2: Transfer to law enforcement
-        twiml += `
-  <Say voice="alice">
-    Connecting you with law enforcement coordination. Please wait.
-  </Say>
+    if (digits === "1") {
+      // Press 1: Display forensic report
+      const text = "Opening forensic report on your dashboard. The case details, transcript, and threat assessment are now live.";
+      twiml += `  <Play>${publicUrl}/api/speak?text=${encodeURIComponent(text)}</Play>
+  <Hangup/>
+`;
+    } else if (digits === "2") {
+      // Press 2: Transfer to law enforcement
+      const text = "Connecting you with law enforcement coordination. Please wait.";
+      twiml += `  <Play>${publicUrl}/api/speak?text=${encodeURIComponent(text)}</Play>
   <Dial timeout="30">
     <Number>${process.env.TEAMMATE_PHONE_NUMBER}</Number>
-  </Dial>`;
-        break;
+  </Dial>
+`;
+    } else if (digits === "3") {
+      // Press 3: Repeat message
+      const repeatText =
+        "This is SIREN priority alert. Fraud detected on the secure line. A scammer has been intercepted during a social engineering attack. Account details have been extracted. The forensic report is being generated.";
+      const promptText =
+        "Press 1 to acknowledge and view the forensic report. Press 2 to transfer to law enforcement coordination.";
 
-      case "3":
-        // Press 3: Repeat message
-        twiml += `
-  <Say voice="alice">
-    This is SIREN priority alert. Fraud detected on the secure line.
-    A scammer has been intercepted during a social engineering attack.
-    Account details have been extracted.
-    The forensic report is being generated.
-  </Say>
+      twiml += `  <Play>${publicUrl}/api/speak?text=${encodeURIComponent(repeatText)}</Play>
   <Pause length="1"/>
-  <Say voice="alice">
-    Press 1 to acknowledge and view the forensic report.
-    Press 2 to transfer to law enforcement coordination.
-  </Say>
+  <Play>${publicUrl}/api/speak?text=${encodeURIComponent(promptText)}</Play>
   <Gather numDigits="1" timeout="15">
-    <Say voice="alice">Press a key to continue</Say>
+    <Play>${publicUrl}/api/speak?text=Press%20a%20key%20to%20continue</Play>
   </Gather>
-  <Redirect>/api/alert-followup</Redirect>`;
-        break;
-
-      default:
-        // Invalid input
-        twiml += `
-  <Say voice="alice">Invalid input. Please press 1, 2, or 3.</Say>
-  <Redirect>/api/alert-response</Redirect>`;
+  <Redirect>/api/alert-followup</Redirect>
+`;
+    } else {
+      // Invalid input
+      const text = "Invalid input. Please press 1, 2, or 3.";
+      twiml += `  <Play>${publicUrl}/api/speak?text=${encodeURIComponent(text)}</Play>
+  <Redirect>/api/alert-response</Redirect>
+`;
     }
 
-    twiml += `
-</Response>`;
+    twiml += `</Response>`;
 
     return new NextResponse(twiml, {
       status: 200,

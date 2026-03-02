@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Download, Printer, Share2, AlertTriangle, ChevronDown } from "lucide-react";
+import { Download, Printer, Share2, AlertTriangle, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Transcript {
   time: string;
@@ -13,6 +13,7 @@ interface Transcript {
 
 export default function VaultPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const phoneNumber = searchParams.get("phone") || "+91 XXXX XXXX";
   const [caseId, setCaseId] = useState("");
   const [isExporting, setIsExporting] = useState(false);
@@ -97,54 +98,58 @@ export default function VaultPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-siren-green font-mono relative print:bg-white print:text-black overflow-x-hidden">
-      {/* BACKGROUND SCANLINE */}
-      <div className="fixed inset-0 pointer-events-none opacity-5 print:hidden">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="scanlines" x="0" y="0" width="100%" height="2" patternUnits="userSpaceOnUse">
-              <line x1="0" y1="0" x2="100%" y2="0" stroke="#22c55e" strokeWidth="1" opacity="0.03" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#scanlines)" />
-        </svg>
+    <main className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-cyan-950/20 to-slate-950 relative overflow-x-hidden overflow-y-auto print:bg-white print:text-black">
+      {/* ANIMATED BACKGROUND */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 print:hidden">
+        <motion.div
+          className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          animate={{ x: [0, 50, -30], y: [0, 30, -50] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-10 right-20 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl"
+          animate={{ x: [0, -40, 30], y: [0, -30, 50] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        />
       </div>
 
       <div className="relative z-10 w-full">
         {/* STICKY HEADER */}
         <motion.header 
-          className="sticky top-0 bg-black/95 border-b border-siren-green/30 p-4 sm:p-6 z-20 print:static print:bg-white print:border-black/20"
+          className="sticky top-0 backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border-b border-cyan-500/40 px-4 sm:px-6 py-6 sm:py-8 z-20 print:static print:bg-white print:border-black/20 print:py-4"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="max-w-5xl mx-auto">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-wider text-siren-green print:text-black">
-                  ▲ SIREN ▲
+                <h1 className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent tracking-tighter">
+                  FORENSIC REPORT
                 </h1>
-                <p className="text-xs text-siren-green/60 print:text-black/60 mt-0.5">FORENSIC REPORT</p>
+                <p className="text-cyan-300/60 text-sm uppercase tracking-widest font-semibold mt-2 print:text-black/60 print:text-xs">Evidence Vault - Authorized Access Only</p>
               </div>
-              <div className="text-xs font-mono space-y-0.5 print:hidden">
-                <p className="text-siren-green/80">{caseId || "SIREN-LOADING"}</p>
+              <div className="text-right space-y-1 print:hidden">
+                <p className="text-cyan-300 font-mono font-bold text-sm">{caseId || "SIREN-LOADING"}</p>
                 {typeof window !== 'undefined' && (
-                  <p className="text-siren-green/50">{new Date().toLocaleString()}</p>
+                  <p className="text-cyan-300/60 text-xs">{new Date().toLocaleString()}</p>
                 )}
               </div>
             </div>
             
             {/* RED ALERT BUTTON */}
             <div className="print:hidden">
-              <button
+              <motion.button
                 onClick={handleRedAlert}
                 disabled={isAlertTriggering}
-                className="w-full px-4 py-2.5 border-2 border-siren-red bg-siren-red/10 text-siren-red hover:bg-siren-red/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-xs sm:text-sm font-bold uppercase tracking-widest"
+                className="w-full px-6 py-3 font-bold uppercase tracking-widest rounded-xl transition-all bg-gradient-to-r from-red-600 to-orange-600 border border-red-400/50 text-white hover:shadow-lg hover:shadow-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                whileHover={{ scale: !isAlertTriggering ? 1.02 : 1 }}
+                whileTap={{ scale: !isAlertTriggering ? 0.98 : 1 }}
               >
-                {isAlertTriggering ? "🔴 CALLING..." : "🚨 RED ALERT - CALL MANAGER"}
-              </button>
+                {isAlertTriggering ? "🔴 CALLING MANAGER..." : "🚨 RED ALERT - CALL MANAGER"}
+              </motion.button>
               {alertResponse && (
                 <motion.p
-                  className="text-xs mt-2 p-2 border border-siren-red/50 bg-siren-red/5 text-siren-red/80 font-mono"
+                  className="text-xs mt-3 p-3 border border-red-500/40 bg-red-900/20 rounded-lg text-red-400 backdrop-blur-sm text-center"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
@@ -156,46 +161,51 @@ export default function VaultPage() {
         </motion.header>
 
         {/* MAIN CONTENT */}
-        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-4 print:p-4 print:space-y-3">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6 print:p-4 print:space-y-4">
           
           {/* THREAT ALERT - ALWAYS VISIBLE */}
           <motion.div
-            className="bg-siren-red/10 border-2 border-siren-red p-4 sm:p-5 rounded-lg print:bg-red-50 print:border-red-300"
+            className="backdrop-blur-xl bg-gradient-to-br from-red-900/25 via-orange-900/20 to-red-900/20 border border-red-500/40 p-5 sm:p-6 rounded-2xl print:bg-red-50 print:border-red-300 print:p-4"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <div className="flex gap-3 items-start">
-              <AlertTriangle className="w-5 h-5 shrink-0 text-siren-red print:text-black mt-1" />
+            <div className="flex gap-4 items-start">
+              <motion.div
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 1, repeat: Infinity }}
+              >
+                <AlertTriangle className="w-6 h-6 shrink-0 text-red-400 print:text-black mt-1" />
+              </motion.div>
               <div className="w-full">
-                <p className="font-bold text-sm text-siren-red print:text-black mb-2">CRITICAL THREAT IDENTIFIED</p>
-                <p className="text-xs sm:text-sm text-siren-green/90 print:text-black leading-relaxed">
-                  Account <span className="font-mono bg-black/30 px-2 py-1 rounded">{reportData.accountNumber}</span> successfully extracted. Law enforcement notified.
+                <p className="font-bold text-base text-red-300 print:text-black mb-2">🚨 CRITICAL THREAT IDENTIFIED</p>
+                <p className="text-sm text-cyan-300/80 print:text-black leading-relaxed">
+                  Account <span className="font-mono bg-black/30 px-3 py-1 rounded border border-cyan-500/20 text-cyan-300">{reportData.accountNumber}</span> successfully extracted during forensic analysis. Law enforcement has been notified.
                 </p>
               </div>
             </div>
           </motion.div>
 
           {/* COLLAPSIBLE SECTIONS */}
-          <div className="space-y-3 print:space-y-2">
+          <div className="space-y-4 print:space-y-3">
             {/* QUICK STATS */}
             <motion.div
-              className="border border-siren-green/30 rounded-lg overflow-hidden bg-black/50 print:bg-gray-50 print:border-black/20"
+              className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
               <button
                 onClick={() => setExpandedSection(expandedSection === "stats" ? null : "stats")}
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 flex items-center justify-between hover:bg-black/60 transition-colors print:bg-white print:hover:bg-white"
+                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-cyan-900/20 transition-colors print:bg-white print:hover:bg-gray-50"
               >
-                <span className="text-sm sm:text-base font-bold text-siren-green print:text-black">INCIDENT SUMMARY</span>
-                <ChevronDown className={`w-5 h-5 transition-transform ${expandedSection === "stats" ? "rotate-180" : ""} print:hidden`} />
+                <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent print:text-black">📊 INCIDENT SUMMARY</span>
+                <ChevronDown className={`w-5 h-5 text-cyan-400 transition-transform print:text-black ${expandedSection === "stats" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
               {(expandedSection === "stats" || typeof window === "undefined") && (
-                <div className="px-4 sm:px-5 py-3 sm:py-4 border-t border-siren-green/20 print:border-black/10">
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-cyan-500/20 print:border-black/10">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {[
                       { label: "Phone", value: reportData.phoneNumber },
                       { label: "Duration", value: reportData.duration },
@@ -203,10 +213,10 @@ export default function VaultPage() {
                       { label: "Status", value: "INTERCEPTED" },
                     ].map((item, i) => (
                       <div key={i} className="text-center print:text-left">
-                        <p className="text-[10px] sm:text-xs text-siren-green/60 print:text-black/60 mb-1 uppercase">
+                        <p className="text-xs text-cyan-300/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">
                           {item.label}
                         </p>
-                        <p className="text-xs sm:text-sm font-mono font-bold text-siren-green print:text-black break-all">
+                        <p className="text-sm font-mono font-bold text-cyan-300 print:text-black break-all">
                           {item.value}
                         </p>
                       </div>
@@ -218,37 +228,37 @@ export default function VaultPage() {
 
             {/* LOCATION & DETAILS */}
             <motion.div
-              className="border border-siren-green/30 rounded-lg overflow-hidden bg-black/50 print:bg-gray-50 print:border-black/20"
+              className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
               <button
                 onClick={() => setExpandedSection(expandedSection === "location" ? null : "location")}
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 flex items-center justify-between hover:bg-black/60 transition-colors print:bg-white print:hover:bg-white"
+                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-cyan-900/20 transition-colors print:bg-white print:hover:bg-gray-50"
               >
-                <span className="text-sm sm:text-base font-bold text-siren-green print:text-black">TARGET INTELLIGENCE</span>
-                <ChevronDown className={`w-5 h-5 transition-transform ${expandedSection === "location" ? "rotate-180" : ""} print:hidden`} />
+                <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent print:text-black">🎯 TARGET INTELLIGENCE</span>
+                <ChevronDown className={`w-5 h-5 text-cyan-400 transition-transform print:text-black ${expandedSection === "location" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
               {(expandedSection === "location" || typeof window === "undefined") && (
-                <div className="px-4 sm:px-5 py-3 sm:py-4 border-t border-siren-green/20 print:border-black/10 space-y-3">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-cyan-500/20 print:border-black/10 space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
-                      <p className="text-xs text-siren-green/60 print:text-black/60 mb-1">Extracted Account</p>
-                      <p className="font-mono text-sm font-bold text-siren-green print:text-black">{reportData.accountNumber}</p>
+                      <p className="text-xs text-cyan-300/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Extracted Account</p>
+                      <p className="font-mono text-sm font-bold text-cyan-300 print:text-black">{reportData.accountNumber}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-siren-green/60 print:text-black/60 mb-1">Location</p>
-                      <p className="text-sm text-siren-green print:text-black">{reportData.city}, {reportData.country}</p>
+                      <p className="text-xs text-cyan-300/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Location</p>
+                      <p className="text-sm text-cyan-300 print:text-black">{reportData.city}, {reportData.country}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-siren-green/60 print:text-black/60 mb-1">Coordinates</p>
-                      <p className="font-mono text-sm text-siren-green print:text-black">{reportData.latitude}°N, {reportData.longitude}°E</p>
+                      <p className="text-xs text-cyan-300/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Coordinates</p>
+                      <p className="font-mono text-sm text-cyan-300 print:text-black">{reportData.latitude}°N, {reportData.longitude}°E</p>
                     </div>
                     <div>
-                      <p className="text-xs text-siren-green/60 print:text-black/60 mb-1">Extraction Time</p>
-                      <p className="font-mono text-sm text-siren-green print:text-black">{reportData.extractedAt}</p>
+                      <p className="text-xs text-cyan-300/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Extraction Time</p>
+                      <p className="font-mono text-sm text-cyan-300 print:text-black">{reportData.extractedAt}</p>
                     </div>
                   </div>
                 </div>
@@ -257,33 +267,33 @@ export default function VaultPage() {
 
             {/* TRANSCRIPT */}
             <motion.div
-              className="border border-siren-green/30 rounded-lg overflow-hidden bg-black/50 print:bg-gray-50 print:border-black/20"
+              className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
               <button
                 onClick={() => setExpandedSection(expandedSection === "transcript" ? null : "transcript")}
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 flex items-center justify-between hover:bg-black/60 transition-colors print:bg-white print:hover:bg-white"
+                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-cyan-900/20 transition-colors print:bg-white print:hover:bg-gray-50"
               >
-                <span className="text-sm sm:text-base font-bold text-siren-green print:text-black">CALL TRANSCRIPT</span>
-                <ChevronDown className={`w-5 h-5 transition-transform ${expandedSection === "transcript" ? "rotate-180" : ""} print:hidden`} />
+                <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent print:text-black">🎙️ CALL TRANSCRIPT</span>
+                <ChevronDown className={`w-5 h-5 text-cyan-400 transition-transform print:text-black ${expandedSection === "transcript" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
               {(expandedSection === "transcript" || typeof window === "undefined") && (
-                <div className="px-4 sm:px-5 py-3 sm:py-4 border-t border-siren-green/20 print:border-black/10 max-h-64 overflow-y-auto space-y-2 print:max-h-none print:overflow-visible print:space-y-1">
+                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-cyan-500/20 print:border-black/10 max-h-96 overflow-y-auto space-y-3 print:max-h-none print:overflow-visible print:space-y-2">
                   {reportData.transcript.map((line: Transcript, i: number) => (
                     <div
                       key={i}
-                      className={`text-xs sm:text-sm p-2 rounded border-l-2 ${
+                      className={`text-xs sm:text-sm p-3 rounded-lg border-l-4 backdrop-blur-sm ${
                         line.sender === "AI"
-                          ? "border-blue-500 bg-blue-950/30 text-blue-100 print:bg-blue-50 print:text-black print:border-blue-300"
-                          : "border-red-500 bg-red-950/30 text-red-100 print:bg-red-50 print:text-black print:border-red-300"
+                          ? "border-blue-500 bg-blue-900/20 text-blue-300 print:bg-blue-50 print:text-black print:border-blue-300"
+                          : "border-red-500 bg-red-900/20 text-red-300 print:bg-red-50 print:text-black print:border-red-300"
                       }`}
                     >
-                      <div className="flex gap-2 mb-1 items-center">
-                        <span className="font-bold text-[10px] uppercase text-inherit">{line.sender}</span>
-                        <span className="text-[10px] opacity-60 print:text-black/60">{line.time}</span>
+                      <div className="flex gap-3 mb-2 items-center">
+                        <span className="font-bold text-[10px] uppercase text-inherit px-2 py-1 bg-black/30 rounded print:bg-gray-200 print:text-black">{line.sender}</span>
+                        <span className="text-[10px] opacity-50 print:text-black/60 font-mono">{line.time}</span>
                       </div>
                       <p className="text-xs leading-relaxed">{line.text}</p>
                     </div>
@@ -294,39 +304,39 @@ export default function VaultPage() {
 
             {/* FORENSIC DETAILS */}
             <motion.div
-              className="border border-siren-green/30 rounded-lg overflow-hidden bg-black/50 print:bg-gray-50 print:border-black/20"
+              className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl overflow-hidden print:bg-gray-50 print:border-black/20"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
               <button
                 onClick={() => setExpandedSection(expandedSection === "forensic" ? null : "forensic")}
-                className="w-full px-4 sm:px-5 py-3 sm:py-4 flex items-center justify-between hover:bg-black/60 transition-colors print:bg-white print:hover:bg-white"
+                className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between hover:bg-cyan-900/20 transition-colors print:bg-white print:hover:bg-gray-50"
               >
-                <span className="text-sm sm:text-base font-bold text-siren-green print:text-black">FORENSIC ANALYSIS</span>
-                <ChevronDown className={`w-5 h-5 transition-transform ${expandedSection === "forensic" ? "rotate-180" : ""} print:hidden`} />
+                <span className="text-base sm:text-lg font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent print:text-black">🔬 FORENSIC ANALYSIS</span>
+                <ChevronDown className={`w-5 h-5 text-cyan-400 transition-transform print:text-black ${expandedSection === "forensic" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
               {(expandedSection === "forensic" || typeof window === "undefined") && (
-                <div className="px-4 sm:px-5 py-3 sm:py-4 border-t border-siren-green/20 print:border-black/10 space-y-3">
+                <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-cyan-500/20 print:border-black/10 space-y-4">
                   {[
                     { title: "Pattern Match", result: "98% confidence to known scam", status: "DETECTED" },
                     { title: "Voice Analysis", result: "High stress indicators detected", status: "CONFIRMED" },
                     { title: "Account Extraction", result: "Successfully captured via social engineering", status: "SUCCESS" },
                     { title: "Case Linking", result: "Linked to 5 prior investigations", status: "LINKED" },
                   ].map((item, i) => (
-                    <div key={i} className="border-l-2 border-siren-green/40 pl-3 print:border-black/20">
-                      <div className="flex justify-between items-start gap-2 mb-1">
-                        <p className="text-xs text-siren-green/70 print:text-black/70 font-medium">{item.title}</p>
-                        <span className={`text-[10px] px-2 py-0.5 rounded shrink-0 font-bold ${
-                          item.status === "DETECTED" ? "bg-red-950/50 text-red-400" :
-                          item.status === "SUCCESS" ? "bg-green-950/50 text-green-400" :
-                          "bg-blue-950/50 text-blue-400"
-                        } print:bg-gray-200 print:text-black`}>
+                    <div key={i} className="border-l-2 border-cyan-500/40 pl-4 print:border-black/20">
+                      <div className="flex justify-between items-start gap-3 mb-2">
+                        <p className="text-sm text-cyan-300/80 print:text-black/80 font-medium">{item.title}</p>
+                        <span className={`text-[10px] px-3 py-1 rounded-lg shrink-0 font-bold uppercase tracking-widest ${
+                          item.status === "DETECTED" ? "bg-red-900/30 border border-red-500/40 text-red-400" :
+                          item.status === "SUCCESS" ? "bg-green-900/30 border border-green-500/40 text-green-400" :
+                          "bg-blue-900/30 border border-blue-500/40 text-blue-400"
+                        } print:bg-gray-200 print:text-black print:border-black/20`}>
                           {item.status}
                         </span>
                       </div>
-                      <p className="text-xs text-siren-green/90 print:text-black">{item.result}</p>
+                      <p className="text-xs text-cyan-300/70 print:text-black/70 leading-relaxed">{item.result}</p>
                     </div>
                   ))}
                 </div>
@@ -336,38 +346,76 @@ export default function VaultPage() {
 
           {/* ACTIONS FOOTER */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-2 sm:gap-3 pt-4 print:hidden border-t border-siren-green/30"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 print:hidden border-t border-cyan-500/20"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <button
+            <motion.button
               onClick={handleDownloadPDF}
               disabled={isExporting}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-siren-green text-siren-green hover:bg-siren-green/20 disabled:opacity-50 transition-all text-sm font-bold uppercase"
+              className="flex items-center justify-center gap-2 px-4 py-3 font-bold uppercase tracking-widest rounded-xl transition-all bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 disabled:opacity-50 text-sm"
+              whileHover={{ scale: !isExporting ? 1.02 : 1 }}
+              whileTap={{ scale: !isExporting ? 0.98 : 1 }}
             >
               <Download className="w-4 h-4" />
               <span>{isExporting ? "Exporting..." : "Download PDF"}</span>
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               onClick={handlePrint}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-siren-green text-siren-green hover:bg-siren-green/20 transition-all text-sm font-bold uppercase"
+              className="flex items-center justify-center gap-2 px-4 py-3 font-bold uppercase tracking-widest rounded-xl transition-all bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 text-sm"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
               <Printer className="w-4 h-4" />
               <span>Print</span>
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               onClick={handleShare}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 border-siren-green text-siren-green hover:bg-siren-green/20 transition-all text-sm font-bold uppercase"
+              className="flex items-center justify-center gap-2 px-4 py-3 font-bold uppercase tracking-widest rounded-xl transition-all bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 text-sm"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
               <Share2 className="w-4 h-4" />
               <span>Copy Report</span>
-            </button>
+            </motion.button>
           </motion.div>
         </div>
 
+        {/* PAGE NAVIGATION */}
+        <motion.div
+          className="backdrop-blur-xl bg-gradient-to-br from-cyan-900/25 via-blue-900/25 to-slate-900/25 border border-cyan-500/40 rounded-2xl p-4 sm:p-5 mb-6 w-full print:hidden"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-xs text-cyan-300/60 font-mono">PAGE 3 / 3 - VAULT (FINAL REPORT)</div>
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <motion.button
+                onClick={() => router.push(`/sting?phone=${encodeURIComponent(phoneNumber)}`)}
+                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all text-sm"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                PREVIOUS
+              </motion.button>
+              <motion.button
+                onClick={() => router.push("/lure")}
+                className="flex items-center justify-center gap-2 px-6 py-3 font-bold uppercase tracking-widest rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400/50 text-white hover:shadow-lg hover:shadow-cyan-500/30 transition-all text-sm"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                RESTART OPERATION
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
+
         {/* PRINT FOOTER */}
-        <div className="hidden print:block border-t border-black/20 mt-8 pt-4 px-4 py-2 max-w-5xl mx-auto">
+        <div className="hidden print:block border-t border-black/20 mt-8 pt-4 px-4 py-2 max-w-7xl mx-auto">
           <p className="text-xs text-black/60">Report ID: {caseId || "SIREN-LOADING"}</p>
           {typeof window !== 'undefined' && (
             <p className="text-xs text-black/60">Generated: {new Date().toLocaleString()}</p>
