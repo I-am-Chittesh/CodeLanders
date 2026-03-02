@@ -1,1 +1,1 @@
-#main ass
+##mainsetup
