@@ -28,6 +28,8 @@ export default function StingPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isCallActive, setIsCallActive] = useState(true);
   const [audioIntensity, setAudioIntensity] = useState(30);
+  const [isCallingAlert, setIsCallingAlert] = useState(false);
+  const [alertStatus, setAlertStatus] = useState("");
 
   // Simulate call progression
   useEffect(() => {
@@ -60,17 +62,57 @@ export default function StingPage() {
     return () => clearInterval(interval);
   }, [isCallActive]);
 
+  // Function to trigger Twilio alert call
+  const triggerAlertCall = async () => {
+    try {
+      setIsCallingAlert(true);
+      setAlertStatus("Initiating alert call...");
+
+      const response = await fetch("/api/call-alert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          phoneNumber,
+          caseData: {
+            riskScore,
+            stressLevel,
+            messagesCount: messages.length,
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setAlertStatus(`Alert call initiated - Call SID: ${data.callSid}`);
+        console.log("Alert call success:", data);
+      } else {
+        setAlertStatus(`⚠️ ${data.message || data.error}`);
+        console.warn("Alert call warning:", data);
+      }
+    } catch (error) {
+      console.error("Failed to initiate alert call:", error);
+      setAlertStatus("Alert call queued - offline mode");
+    } finally {
+      setIsCallingAlert(false);
+    }
+  };
+
   // AUTO-REDIRECT TO VAULT WHEN CALL ENDS
   useEffect(() => {
     if (!isCallActive && !callEndedRef.current) {
       callEndedRef.current = true;
+      
+      // Trigger alert call first
+      triggerAlertCall();
+      
       const timer = setTimeout(() => {
         router.push(`/vault?phone=${encodeURIComponent(phoneNumber)}`);
       }, 5000); // 5 second delay before redirect
 
       return () => clearTimeout(timer);
     }
-  }, [isCallActive, router, phoneNumber]);
+  }, [isCallActive, router, phoneNumber, riskScore, stressLevel, messages.length]);
 
   const generateId = () => {
     messageIdRef.current += 1;
@@ -266,19 +308,31 @@ export default function StingPage() {
             if (isCallActive) {
               // If manually ending the call
               callEndedRef.current = true;
+              triggerAlertCall();
               setTimeout(() => {
                 router.push(`/vault?phone=${encodeURIComponent(phoneNumber)}`);
               }, 3000);
             }
           }}
+          disabled={isCallingAlert}
           className={`px-6 py-2 border-2 font-mono text-xs tracking-widest transition-all ${
             isCallActive
-              ? "border-siren-red text-siren-red hover:bg-siren-red/20"
-              : "border-siren-green text-siren-green hover:bg-siren-green/20"
+              ? "border-siren-red text-siren-red hover:bg-siren-red/20 disabled:opacity-50"
+              : "border-siren-green text-siren-green hover:bg-siren-green/20 disabled:opacity-50"
           }`}
         >
-          {isCallActive ? "END_CALL" : "NEW_CALL"}
+          {isCallingAlert ? "CALLING_ALERT..." : isCallActive ? "END_CALL" : "NEW_CALL"}
         </button>
+
+        {alertStatus && (
+          <motion.div
+            className="text-xs text-siren-green/70 px-4 py-2 border border-siren-green/30 rounded bg-black/50 max-w-xs text-center"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            {alertStatus}
+          </motion.div>
+        )}
 
         <div className="text-xs text-siren-green/60">
           Session: {Math.round(messages.length / 2)} exchanges

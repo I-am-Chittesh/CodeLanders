@@ -17,6 +17,8 @@ export default function VaultPage() {
   const [caseId, setCaseId] = useState("");
   const [isExporting, setIsExporting] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>("threat");
+  const [isAlertTriggering, setIsAlertTriggering] = useState(false);
+  const [alertResponse, setAlertResponse] = useState<string>("");
 
   // Generate caseId on client only to avoid hydration mismatch
   useEffect(() => {
@@ -63,6 +65,37 @@ export default function VaultPage() {
     alert("Report copied to clipboard!");
   };
 
+  // 🚨 RED ALERT TRIGGER - Call the Bank Manager
+  const handleRedAlert = async () => {
+    try {
+      setIsAlertTriggering(true);
+      setAlertResponse("Initiating RED ALERT...");
+
+      const response = await fetch("/api/trigger-alert", {
+        method: "GET",
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setAlertResponse(
+          `✅ ALERT SENT! Call SID: ${data.callSid.substring(0, 8)}... | Status: ${data.status}`
+        );
+        console.log("🚨 RED ALERT triggered:", data);
+      } else {
+        setAlertResponse(
+          `❌ ${data.error}: ${data.message || data.solution}`
+        );
+        console.error("Alert error:", data);
+      }
+    } catch (error) {
+      setAlertResponse(`❌ Connection error: ${String(error)}`);
+      console.error("Failed to trigger alert:", error);
+    } finally {
+      setIsAlertTriggering(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-black text-siren-green font-mono relative print:bg-white print:text-black overflow-x-hidden">
       {/* BACKGROUND SCANLINE */}
@@ -84,17 +117,39 @@ export default function VaultPage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold tracking-wider text-siren-green print:text-black">
-                ▲ SIREN ▲
-              </h1>
-              <p className="text-xs text-siren-green/60 print:text-black/60 mt-0.5">FORENSIC REPORT</p>
+          <div className="max-w-5xl mx-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-wider text-siren-green print:text-black">
+                  ▲ SIREN ▲
+                </h1>
+                <p className="text-xs text-siren-green/60 print:text-black/60 mt-0.5">FORENSIC REPORT</p>
+              </div>
+              <div className="text-xs font-mono space-y-0.5 print:hidden">
+                <p className="text-siren-green/80">{caseId || "SIREN-LOADING"}</p>
+                {typeof window !== 'undefined' && (
+                  <p className="text-siren-green/50">{new Date().toLocaleString()}</p>
+                )}
+              </div>
             </div>
-            <div className="text-xs font-mono space-y-0.5 print:hidden">
-              <p className="text-siren-green/80">{caseId || "SIREN-LOADING"}</p>
-              {typeof window !== 'undefined' && (
-                <p className="text-siren-green/50">{new Date().toLocaleString()}</p>
+            
+            {/* RED ALERT BUTTON */}
+            <div className="print:hidden">
+              <button
+                onClick={handleRedAlert}
+                disabled={isAlertTriggering}
+                className="w-full px-4 py-2.5 border-2 border-siren-red bg-siren-red/10 text-siren-red hover:bg-siren-red/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all text-xs sm:text-sm font-bold uppercase tracking-widest"
+              >
+                {isAlertTriggering ? "🔴 CALLING..." : "🚨 RED ALERT - CALL MANAGER"}
+              </button>
+              {alertResponse && (
+                <motion.p
+                  className="text-xs mt-2 p-2 border border-siren-red/50 bg-siren-red/5 text-siren-red/80 font-mono"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  {alertResponse}
+                </motion.p>
               )}
             </div>
           </div>
