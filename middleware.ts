@@ -1,0 +1,11 @@
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+// This function allows ALL requests to pass through
+export function middleware(request: NextRequest) {
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: '/:path*', // Apply to all paths
+}
