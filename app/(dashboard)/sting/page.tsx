@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import StingPageContent from "./content.tsx";
+import StingPageContent from "./content";
 
 export default function StingPage() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import VaultPageContent from "./content.tsx";
+import VaultPageContent from "./content";
 
 export default function VaultPage() {
   return (
