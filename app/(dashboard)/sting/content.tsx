@@ -269,6 +269,27 @@ export default function StingPageContent() {
 
   return (
     <main className="h-screen w-screen bg-gradient-to-br from-slate-950 via-red-950 to-slate-950 relative overflow-hidden flex flex-col">
+      {/* VOICE RECORDING BAR - TOP */}
+      {isCallActive && (
+        <div className="w-full h-12 bg-gradient-to-r from-green-900/30 to-green-900/20 border-b border-green-500/50 flex items-center justify-center gap-1 z-50 backdrop-blur-sm">
+          {[...Array(40)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="w-1 bg-gradient-to-t from-green-400 to-green-300 rounded-full"
+              animate={{
+                height: [8, Math.random() * 40 + 8, 8],
+              }}
+              transition={{
+                duration: Math.random() * 0.3 + 0.2,
+                repeat: Infinity,
+                delay: i * 0.02,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
+      )}
+
       {/* ANIMATED BACKGROUND - PREMIUM */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
