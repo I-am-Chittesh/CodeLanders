@@ -16,20 +16,21 @@ export default function VaultPage() {
   const router = useRouter();
   const phoneNumber = searchParams.get("phone") || "+91 XXXX XXXX";
   const [caseId, setCaseId] = useState("");
+  const [currentDate, setCurrentDate] = useState("");
   const [isExporting, setIsExporting] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>("threat");
   const [isAlertTriggering, setIsAlertTriggering] = useState(false);
   const [alertResponse, setAlertResponse] = useState<string>("");
 
-  // Generate caseId on client only to avoid hydration mismatch
+  // Generate caseId and set date on client only to avoid hydration mismatch
   useEffect(() => {
     setCaseId(`SIREN-${Math.random().toString(36).substring(2, 10).toUpperCase()}`);
+    setCurrentDate(new Date().toLocaleString());
   }, []);
 
   const reportData = {
     phoneNumber,
     accountNumber: "987654321098",
-    extractedAt: new Date().toLocaleTimeString(),
     city: "Mumbai",
     country: "India",
     latitude: "19.076",
@@ -98,41 +99,57 @@ export default function VaultPage() {
   };
 
   return (
-    <main className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-x-hidden overflow-y-auto print:bg-white print:text-black">
-      {/* ANIMATED BACKGROUND */}
+    <main className="h-screen w-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 relative overflow-hidden flex flex-col print:bg-white print:text-black">
+      {/* ANIMATED BACKGROUND - PREMIUM */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 print:hidden">
         <motion.div
-          className="absolute top-20 left-10 w-96 h-96 bg-slate-700/5 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
           animate={{ x: [0, 50, -30], y: [0, 30, -50] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-10 right-20 w-80 h-80 bg-slate-700/5 rounded-full blur-3xl"
+          className="absolute bottom-10 right-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl"
           animate={{ x: [0, -40, 30], y: [0, -30, 50] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
         />
+        <motion.div
+          className="absolute top-1/2 right-1/4 w-72 h-72 bg-pink-500/5 rounded-full blur-3xl"
+          animate={{ x: [-50, 50, -30], y: [50, -30, 50] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        />
       </div>
 
-      <div className="relative z-10 w-full">
+      <div className="relative z-10 w-full flex-1 overflow-y-auto max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* STICKY HEADER */}
         <motion.header 
-          className="sticky top-0 backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border-b border-slate-600/30 px-4 sm:px-6 py-6 sm:py-8 z-20 print:static print:bg-white print:border-black/20 print:py-4"
+          className="sticky top-0 backdrop-blur-2xl bg-gradient-to-br from-purple-900/30 via-slate-800/30 to-indigo-900/30 border-b border-purple-500/30 border-t-purple-400/50 px-4 sm:px-6 py-6 sm:py-8 z-20 print:static print:bg-white print:border-black/20 print:py-4 rounded-b-2xl print:rounded-none"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-6">
               <div>
-                <h1 className="text-3xl sm:text-4xl font-black text-slate-200 tracking-tighter">
+                <motion.h1 
+                  className="text-4xl sm:text-5xl font-black bg-gradient-to-r from-purple-300 via-pink-300 to-purple-400 bg-clip-text text-transparent tracking-tighter"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.1 }}
+                >
                   FORENSIC REPORT
-                </h1>
-                <p className="text-slate-400/70 text-sm uppercase tracking-widest font-semibold mt-2 print:text-black/60 print:text-xs">Evidence Vault - Authorized Access Only</p>
+                </motion.h1>
+                <motion.p 
+                  className="text-purple-300/70 text-base uppercase tracking-widest font-semibold mt-3 print:text-black/60 print:text-xs"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                >
+                  🔐 Evidence Vault - Authorized Access Only
+                </motion.p>
               </div>
-              <div className="text-right space-y-1 print:hidden">
-                <p className="text-slate-300 font-mono font-bold text-sm">{caseId || "SIREN-LOADING"}</p>
-                {typeof window !== 'undefined' && (
-                  <p className="text-slate-400/60 text-xs">{new Date().toLocaleString()}</p>
-                )}
+              <div className="text-right space-y-2 print:hidden">
+                <p className="text-slate-300 font-mono font-bold text-lg">{caseId || "SIREN-LOADING"}</p>
+                {currentDate && <p className="text-slate-400/70 text-xs">{currentDate}</p>}
               </div>
             </div>
             
@@ -203,7 +220,7 @@ export default function VaultPage() {
                 <ChevronDown className={`w-5 h-5 text-slate-300 transition-transform print:text-black ${expandedSection === "stats" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
-              {(expandedSection === "stats" || typeof window === "undefined") && (
+              {expandedSection === "stats" && (
                 <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-slate-600/30 print:border-black/10">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {[
@@ -241,7 +258,7 @@ export default function VaultPage() {
                 <ChevronDown className={`w-5 h-5 text-slate-300 transition-transform print:text-black ${expandedSection === "location" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
-              {(expandedSection === "location" || typeof window === "undefined") && (
+              {expandedSection === "location" && (
                 <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-slate-600/30 print:border-black/10 space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
@@ -258,7 +275,7 @@ export default function VaultPage() {
                     </div>
                     <div>
                       <p className="text-xs text-slate-400/60 print:text-black/60 mb-2 uppercase tracking-widest font-semibold">Extraction Time</p>
-                      <p className="font-mono text-sm text-slate-200 print:text-black">{reportData.extractedAt}</p>
+                      <p className="font-mono text-sm text-slate-200 print:text-black">{currentDate || "Loading..."}</p>
                     </div>
                   </div>
                 </div>
@@ -280,7 +297,7 @@ export default function VaultPage() {
                 <ChevronDown className={`w-5 h-5 text-slate-300 transition-transform print:text-black ${expandedSection === "transcript" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
-              {(expandedSection === "transcript" || typeof window === "undefined") && (
+              {expandedSection === "transcript" && (
                 <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-slate-600/30 print:border-black/10 max-h-96 overflow-y-auto space-y-3 print:max-h-none print:overflow-visible print:space-y-2">
                   {reportData.transcript.map((line: Transcript, i: number) => (
                     <div
@@ -317,7 +334,7 @@ export default function VaultPage() {
                 <ChevronDown className={`w-5 h-5 text-slate-300 transition-transform print:text-black ${expandedSection === "forensic" ? "rotate-180" : ""} print:hidden`} />
               </button>
               
-              {(expandedSection === "forensic" || typeof window === "undefined") && (
+              {expandedSection === "forensic" && (
                 <div className="px-5 sm:px-6 py-4 sm:py-5 border-t border-slate-600/30 print:border-black/10 space-y-4">
                   {[
                     { title: "Pattern Match", result: "98% confidence to known scam", status: "DETECTED" },
@@ -417,9 +434,7 @@ export default function VaultPage() {
         {/* PRINT FOOTER */}
         <div className="hidden print:block border-t border-black/20 mt-8 pt-4 px-4 py-2 max-w-7xl mx-auto">
           <p className="text-xs text-black/60">Report ID: {caseId || "SIREN-LOADING"}</p>
-          {typeof window !== 'undefined' && (
-            <p className="text-xs text-black/60">Generated: {new Date().toLocaleString()}</p>
-          )}
+          {currentDate && <p className="text-xs text-black/60">Generated: {currentDate}</p>}
           <p className="text-xs text-black/60 mt-2">Authorized Law Enforcement Use Only - Confidential</p>
         </div>
       </div>

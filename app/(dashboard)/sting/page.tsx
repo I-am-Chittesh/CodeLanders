@@ -32,7 +32,16 @@ export default function StingPage() {
   const [alertStatus, setAlertStatus] = useState("");
   const [isSimulatingVoice, setIsSimulatingVoice] = useState(false);
   const [aiResponse, setAiResponse] = useState<string>("");
+  const [locationCoords, setLocationCoords] = useState({ lat: 19.076, lng: 72.8776 });
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  // Initialize location with random offset on client only
+  useEffect(() => {
+    setLocationCoords({
+      lat: 19.076 + (Math.random() - 0.5) * 0.2,
+      lng: 72.8776 + (Math.random() - 0.5) * 0.2,
+    });
+  }, []);
 
   // Simulate call progression
   useEffect(() => {
@@ -259,18 +268,23 @@ export default function StingPage() {
   };
 
   return (
-    <main className="h-screen w-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden flex flex-col">
-      {/* ANIMATED BACKGROUND */}
+    <main className="h-screen w-screen bg-gradient-to-br from-slate-950 via-red-950 to-slate-950 relative overflow-hidden flex flex-col">
+      {/* ANIMATED BACKGROUND - PREMIUM */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
-          className="absolute top-20 left-10 w-96 h-96 bg-slate-700/5 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-96 h-96 bg-red-500/10 rounded-full blur-3xl"
           animate={{ x: [0, 50, -30], y: [0, 30, -50] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-10 right-20 w-80 h-80 bg-slate-700/5 rounded-full blur-3xl"
+          className="absolute bottom-10 right-20 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl"
           animate={{ x: [0, -40, 30], y: [0, -30, 50] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute top-1/3 left-1/3 w-72 h-72 bg-yellow-500/5 rounded-full blur-3xl"
+          animate={{ x: [50, -50, 30], y: [-30, 50, -50] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
@@ -279,21 +293,31 @@ export default function StingPage() {
         
         {/* HEADER */}
         <motion.div
-          className="mb-8 max-w-7xl mx-auto px-4 sm:px-6"
-          initial={{ opacity: 0, y: -20 }}
+          className="mb-10 max-w-7xl mx-auto px-4 sm:px-6"
+          initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center justify-between flex-wrap gap-6">
             <div>
-              <h1 className="text-4xl sm:text-5xl font-black tracking-tighter mb-1">
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+              <motion.h1 
+                className="text-5xl sm:text-6xl font-black tracking-tighter mb-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+              >
+                <span className="bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 bg-clip-text text-transparent">
                   OPERATION: STING
                 </span>
-              </h1>
-              <p className="text-cyan-300/60 text-sm uppercase tracking-widest font-semibold">
+              </motion.h1>
+              <motion.p 
+                className="text-red-300/80 text-base uppercase tracking-widest font-semibold"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
                 Live Call Analysis & Enforcement Dispatch
-              </p>
+              </motion.p>
             </div>
             <div className="flex items-center gap-4 flex-wrap">
               {isCallActive && (
@@ -310,7 +334,7 @@ export default function StingPage() {
                   <span className="text-xs font-semibold text-red-400 uppercase tracking-widest">CALL ACTIVE</span>
                 </motion.div>
               )}
-              <div className="text-xs text-cyan-300/60 font-mono px-3 py-2 backdrop-blur-sm bg-cyan-900/10 border border-cyan-500/20 rounded-lg">
+              <div className="text-xs text-cyan-300/60 font-mono px-3 py-2 backdrop-blur-sm bg-cyan-900/10 border border-cyan-500/20 rounded-lg" suppressHydrationWarning>
                 {new Date().toLocaleTimeString()}
               </div>
             </div>
@@ -334,8 +358,8 @@ export default function StingPage() {
                 location={{
                   city: "Mumbai",
                   country: "India",
-                  lat: 19.076 + (Math.random() - 0.5) * 0.2,
-                  lng: 72.8776 + (Math.random() - 0.5) * 0.2,
+                  lat: locationCoords.lat,
+                  lng: locationCoords.lng,
                 }}
               />
             </div>

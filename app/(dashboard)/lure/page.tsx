@@ -92,18 +92,23 @@ export default function LurePage() {
   };
 
   return (
-    <main ref={mainRef} className="h-screen w-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden flex flex-col">
-      {/* ANIMATED BACKGROUND */}
+    <main ref={mainRef} className="h-screen w-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 relative overflow-hidden flex flex-col">
+      {/* PREMIUM ANIMATED BACKGROUND */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
-          className="absolute top-20 left-10 w-96 h-96 bg-slate-700/5 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"
           animate={{ x: [0, 50, -30], y: [0, 30, -50] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute bottom-10 right-20 w-80 h-80 bg-slate-700/5 rounded-full blur-3xl"
+          className="absolute bottom-10 right-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl"
           animate={{ x: [0, -40, 30], y: [0, -30, 50] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute top-1/2 right-1/4 w-72 h-72 bg-cyan-500/5 rounded-full blur-3xl"
+          animate={{ x: [-50, 50, -30], y: [50, -30, 50] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
@@ -112,27 +117,37 @@ export default function LurePage() {
         
         {/* TOP SECTION - HEADER */}
         <motion.div
-          className="text-center mb-12 sm:mb-16 max-w-3xl mx-auto px-4 sm:px-6"
-          initial={{ opacity: 0, y: -30 }}
+          className="text-center mb-16 sm:mb-20 max-w-3xl mx-auto px-4 sm:px-6 pt-4"
+          initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <div className="mb-4">
-            <h1 className="text-5xl sm:text-6xl font-black tracking-tighter mb-3 text-slate-200">
+          <div className="mb-6">
+            <motion.h1 
+              className="text-6xl sm:text-7xl font-black tracking-tighter mb-4 bg-gradient-to-r from-blue-300 via-cyan-300 to-blue-400 bg-clip-text text-transparent"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.1 }}
+            >
               SIREN
-            </h1>
-            <p className="text-slate-400/70 text-sm uppercase tracking-widest font-semibold">
+            </motion.h1>
+            <motion.p 
+              className="text-slate-300 text-base uppercase tracking-widest font-semibold letter-spacing-wide"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
               Forensic Voice AI Engagement System
-            </p>
+            </motion.p>
           </div>
         </motion.div>
 
         {/* MAIN CARD - CENTERED */}
         <motion.div
-          className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-3xl p-8 sm:p-10 md:p-14 shadow-2xl shadow-slate-900/20 max-w-3xl mx-auto px-4 sm:px-6"
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
+          className="backdrop-blur-2xl bg-gradient-to-br from-blue-900/20 via-slate-800/20 to-purple-900/20 border border-blue-500/30 border-l-blue-400/50 border-t-blue-400/50 rounded-3xl p-10 sm:p-12 md:p-16 shadow-2xl shadow-blue-900/30 max-w-3xl mx-auto px-4 sm:px-6"
+          initial={{ opacity: 0, scale: 0.90, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.15, ease: "easeOut" }}
         >
           {/* PRE-RECORDING STATE */}
           {!isRecording ? (
@@ -140,50 +155,73 @@ export default function LurePage() {
               
 
               {/* TITLE */}
-              <div className="space-y-3">
-                <h2 className="text-3xl sm:text-4xl font-black text-white">
+              <div className="space-y-4 mb-10">
+                <motion.h2 
+                  className="text-4xl sm:text-5xl font-black text-white tracking-tight"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                >
                   OPERATION: LURE
-                </h2>
-                <p className="text-slate-300/70 text-sm leading-relaxed max-w-lg mx-auto">
+                </motion.h2>
+                <motion.p 
+                  className="text-slate-200 text-base sm:text-lg leading-relaxed max-w-lg mx-auto"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
                   Engage voice AI to analyze and document suspected scammer behavior. Full conversation forensically logged.
-                </p>
+                </motion.p>
               </div>
 
-              {/* START BUTTON */}
+              {/* START BUTTON - PREMIUM */}
               <motion.button
                 onClick={handleStartRecording}
-                className="w-full bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 text-white font-black uppercase tracking-widest py-6 sm:py-7 px-8 rounded-2xl text-base sm:text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-slate-900/40 mx-auto max-w-sm"
-                whileHover={{ scale: 1.03, boxShadow: "0 0 30px rgba(71, 85, 105, 0.4)" }}
-                whileTap={{ scale: 0.97 }}
+                className="relative w-full bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 hover:from-blue-500 hover:via-cyan-400 hover:to-blue-400 text-white font-black uppercase tracking-widest py-7 sm:py-8 px-8 rounded-2xl text-base sm:text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-blue-500/40 mx-auto max-w-sm border border-blue-400/30 overflow-hidden group"
+                whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(59, 130, 246, 0.6)" }}
+                whileTap={{ scale: 0.95 }}
               >
-                <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 0.6, repeat: Infinity }}>
-                  <Mic className="w-6 h-6" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-300 -skew-x-12" />
+                <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.7, repeat: Infinity }}>
+                  <Mic className="w-6 h-6 relative z-10" />
                 </motion.div>
-                START RECORDING
+                <span className="relative z-10">START RECORDING</span>
               </motion.button>
 
               {/* INFO BOX */}
               <motion.div
-                className="p-4 sm:p-5 bg-gradient-to-br from-slate-800/30 to-slate-700/20 border border-slate-600/20 rounded-xl text-center text-sm text-slate-300/80 backdrop-blur-sm"
-                initial={{ opacity: 0, y: 10 }}
+                className="p-5 sm:p-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-400/40 border-l-blue-300/60 rounded-2xl text-center text-sm text-slate-200 backdrop-blur-md"
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
               >
-                <p className="leading-relaxed">Clicking will activate voice AI engagement mode and begin forensic conversation logging</p>
+                <p className="leading-relaxed font-medium">✓ Clicking will activate voice AI engagement mode and begin forensic conversation logging</p>
               </motion.div>
             </motion.div>
 
           ) : (
             /* RECORDING/DETAILS STATE */
-            <motion.div className="space-y-8">
+            <motion.div className="space-y-10">
               
 
               {/* TITLE */}
-              <div className="text-center space-y-2 pb-6 border-b border-slate-600/20">
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-200">
-                  SCAMMER PROFILE DETECTED
-                </h2>
-                <p className="text-slate-400/60 text-sm">Details revealing in real-time...</p>
+              <div className="text-center space-y-3 pb-8 border-b border-blue-400/20">
+                <motion.h2 
+                  className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  🎯 SCAMMER PROFILE DETECTED
+                </motion.h2>
+                <motion.p 
+                  className="text-slate-300 text-sm font-medium"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                  Details revealing in real-time...
+                </motion.p>
               </div>
 
               {/* DETAILS GRID - IMPROVED SPACING */}
@@ -218,6 +256,7 @@ export default function LurePage() {
                               ? "text-red-300"
                               : detail.label === "Fraud Type"
                               ? "text-slate-300"
+ 
                               : "text-slate-200"
                           }`}
                         >
