@@ -1,12 +1,12 @@
-"use client";
+﻿"use client";
 
 import { Suspense } from "react";
-import StingPageContent from "./content";
+import VaultPageContent from "./content";
 
-export default function StingPage() {
+export default function VaultPage() {
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
-      <StingPageContent />
+      <VaultPageContent />
     </Suspense>
   );
 }
