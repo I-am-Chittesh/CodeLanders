@@ -120,7 +120,7 @@ export default function VaultPage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               <div>
                 <h1 className="text-3xl sm:text-4xl font-black text-slate-200 tracking-tighter">
@@ -161,7 +161,7 @@ export default function VaultPage() {
         </motion.header>
 
         {/* MAIN CONTENT */}
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6 print:p-4 print:space-y-4">
+        <div className="w-screen px-4 sm:px-6 py-6 sm:py-8 space-y-6 print:p-4 print:space-y-4">
           
           {/* THREAT ALERT - ALWAYS VISIBLE */}
           <motion.div
@@ -399,7 +399,7 @@ export default function VaultPage() {
                 whileTap={{ scale: 0.95 }}
               >
                 <ChevronLeft className="w-4 h-4" />
-                PREVIOUS
+                GO TO STING
               </motion.button>
               <motion.button
                 onClick={() => router.push("/lure")}
@@ -408,7 +408,7 @@ export default function VaultPage() {
                 whileTap={{ scale: 0.95 }}
               >
                 <ChevronLeft className="w-4 h-4" />
-                RESTART OPERATION
+                GO TO LURE
               </motion.button>
             </div>
           </div>

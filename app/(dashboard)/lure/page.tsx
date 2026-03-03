@@ -92,7 +92,7 @@ export default function LurePage() {
   };
 
   return (
-    <main ref={mainRef} className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-x-hidden overflow-y-auto">
+    <main ref={mainRef} className="h-screen w-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden flex flex-col">
       {/* ANIMATED BACKGROUND */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
@@ -108,11 +108,11 @@ export default function LurePage() {
       </div>
 
       {/* SCROLLABLE CONTENT WRAPPER */}
-      <div className="relative z-20 w-full max-w-3xl px-4 sm:px-6 py-8 sm:py-16 mx-auto">
+      <div className="relative z-20 w-screen flex-1 overflow-y-auto py-8 sm:py-16">
         
         {/* TOP SECTION - HEADER */}
         <motion.div
-          className="text-center mb-12 sm:mb-16"
+          className="text-center mb-12 sm:mb-16 max-w-3xl mx-auto px-4 sm:px-6"
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -129,7 +129,7 @@ export default function LurePage() {
 
         {/* MAIN CARD - CENTERED */}
         <motion.div
-          className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-3xl p-8 sm:p-10 md:p-14 shadow-2xl shadow-slate-900/20"
+          className="backdrop-blur-xl bg-gradient-to-br from-slate-800/40 via-slate-700/40 to-slate-900/30 border border-slate-600/30 rounded-3xl p-8 sm:p-10 md:p-14 shadow-2xl shadow-slate-900/20 max-w-3xl mx-auto px-4 sm:px-6"
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.1 }}
@@ -300,7 +300,7 @@ export default function LurePage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              NEXT PAGE
+              GO TO STING
               <ChevronRight className="w-4 h-4" />
             </motion.button>
           </div>

@@ -259,7 +259,7 @@ export default function StingPage() {
   };
 
   return (
-    <main className="w-full min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-x-hidden overflow-y-auto">
+    <main className="h-screen w-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden flex flex-col">
       {/* ANIMATED BACKGROUND */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
@@ -275,11 +275,11 @@ export default function StingPage() {
       </div>
 
       {/* CONTENT WRAPPER */}
-      <div className="relative z-10 w-full max-w-7xl px-4 sm:px-6 py-6 sm:py-8 mx-auto">
+      <div className="relative z-10 w-screen flex-1 overflow-y-auto py-6 sm:py-8">
         
         {/* HEADER */}
         <motion.div
-          className="mb-8"
+          className="mb-8 max-w-7xl mx-auto px-4 sm:px-6"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -361,7 +361,7 @@ export default function StingPage() {
               transition={{ delay: 0.3 }}
             >
               <div className="flex flex-col items-center gap-4">
-                <p className="text-xs uppercase tracking-widest text-slate-300/60 font-semibold">AI Voice Response</p>
+                <p className="text-xs uppercase tracking-widest text-slate-300/60 font-semibold">ML Response Generation</p>
                 <motion.button
                   onClick={simulateAiVoice}
                   disabled={isSimulatingVoice || !isCallActive}
@@ -379,7 +379,7 @@ export default function StingPage() {
                       GENERATING...
                     </span>
                   ) : (
-                    "🎤 SIMULATE AI VOICE"
+                    "🤖 RESPOND USING ML"
                   )}
                 </motion.button>
 
@@ -517,7 +517,7 @@ export default function StingPage() {
                 whileTap={{ scale: 0.95 }}
               >
                 <ChevronLeft className="w-4 h-4" />
-                PREVIOUS
+                GO TO LURE
               </motion.button>
               <motion.button
                 onClick={() => router.push(`/vault?phone=${encodeURIComponent(phoneNumber)}`)}
@@ -525,7 +525,7 @@ export default function StingPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                NEXT PAGE
+                GO TO VAULT
                 <ChevronRight className="w-4 h-4" />
               </motion.button>
             </div>
